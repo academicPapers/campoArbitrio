@@ -1,4 +1,5 @@
 \usepackage[brazil]{babel}
+%\usepackage{titling}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{float}
@@ -24,8 +25,13 @@
 \usepackage{fancyhdr}
 % Turn on the style
 \pagestyle{fancy}
+\fancyhf{}
 % Clear the header and footer
 \fancyhead{}
 \fancyfoot{}
 % Set the right side of the footer to be the page number
+\fancyhead[CO, CE]{
+  \textbf{IX SIMPÓSIO DA SOCIEDADE BRASILEIRA DE ENGENHARIA DE AVALIAÇÕES}
+}
+\fancyfoot[CO, CE]{\textbf{Crítica ao uso do Campo de Arbítrio do Avaliador}}
 \fancyfoot[R]{\thepage~/~\pageref{LastPage}}

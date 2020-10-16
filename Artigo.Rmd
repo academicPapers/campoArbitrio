@@ -1,11 +1,11 @@
 ---
-title: "Crítica ao Campo de Arbítrio do Avaliador"
-subtitle:  "Como fazer uso do intervalo de predição corretamente"
+title: "Crítica ao uso do Campo de Arbítrio do Avaliador"
+subtitle:  "Devido à escassez de dados de mercado"
 author: 
   - Luiz F. P. Droubi^[SPU/SC, lfpdroubi@gmail.com]
   - Carlos Augusto Zilli^[IFSC, carlos.zilli@ifsc.edu.br]
   - Willian Zonato^[SPU/SC, will.zonato@gmail.com]
-  - Norberto Hoccheim^[UFSC, hochheim@gmail.com]
+  - Norberto Hochheim^[UFSC, hochheim@gmail.com]
 date: "`r format(Sys.Date(), '%d/%m/%Y')`"
 output:
   pdf_document:
@@ -51,19 +51,20 @@ library(lmtest)
 #library(robustbase)
 library(sandwich)
 library(car)
-seed <- 1000
+library(mosaic)
 gg_color_hue <- function(n) {
   hues = seq(15, 375, length = n + 1)
   hcl(h = hues, l = 65, c = 100)[1:n]
 }
 red = gg_color_hue(1)
-epsilonsd <- 200
+seed <- 1
+epsilonsd <- 100
 ```
 
 # Resumo {-}
 
 Neste trabalho são apresentados aspectos teóricos e práticos relacionados ao
-conceito de Campo de Arbítrio (CA) do Avaliador, dado a imnportância deste
+conceito de Campo de Arbítrio (CA) do Avaliador, dada a importância deste
 conceito na Engenharia de Avaliações. Foram elencados os critérios previstos na
 normativa que possibilitam ao avaliador fazer uso do Campo de Arbítrio,
 detalhando cada um destes critérios levantados e ponderando se a adoção do
@@ -76,33 +77,34 @@ abordagens, fazendo uso tanto do Campo de Arbítrio do Avaliador  quando do
 intervalo de predição (IP) das previsões efetuadas com os modelos obtidos em
 cada abordagem. Outro aspecto importante abordado lateralmente neste trabalho é
 sobre a previsão de valores de venda a partir de dados de oferta, haja vista que
-a falta de dados de oferta e, em consequência a falta de um fator oferta obtido
-cientificamamente, é um dos grandes motivos que levam os avaliadores a fazerem
-uso do Campo de Arbítrio. Ao final, a partir da pesquisa elaborada e dos
+a falta de dados de transações e, em consequência a falta de um fator oferta
+obtido cientificamamente, é um dos grandes motivos que levam os avaliadores a
+fazerem uso do Campo de Arbítrio. Ao final, a partir da pesquisa elaborada e dos
 resultados obtidos são feitas recomendações visando uma melhoria na NBR 14.653
 numa eventual revisão desta.
 
 # Introdução
 
-Recentemente, durante o [XX Cobreap](http://www.cobreap.com.br/2019/), foi
-apresentado o artigo intitulado "Crítica à Avaliação Intervalar na NBR14.653-02"
-[@droubi2019]. Neste trabalho recomendou-se que, eventualmente, em uma próxima
-revisão da parte 2 da NBR 14.653-02 [-@NBR1465302], a avaliação intervalar, tal
-como está normatizada no momento, não seja mantida como se encontra. Com base
-nos resultados obtidos naquele artigo, foram elaborados outros estudos, com
-ajustes diferentes, com o intuito de verificar a pertinência das conclusões
-obtidas na, assim como acrescentar alguns pontos no que tange ao Campo de
-Arbítrio do avaliador, especialmente no que tange à omissão de variável
-relevante. Também foram feitas considerações a respeito do fator oferta.
-Pretende-se com este trabalho deixar detalhes de uma proposta de como
-poder-se-ia modificar o atual consenso da avaliação intervalar numa futura
-revisão normativa.
+No [XX Cobreap](http://www.cobreap.com.br/2019/), foi apresentado o artigo
+intitulado "Crítica à Avaliação Intervalar na NBR14.653-02" [@droubi2019]. Neste
+trabalho recomendou-se que, eventualmente, em uma próxima revisão da parte 2 da
+NBR 14.653-02 [-@NBR1465302], a avaliação intervalar, tal como está normatizada
+no momento, não seja mantida como se encontra. Com base nos resultados obtidos
+naquele artigo, foram elaborados outros estudos, com ajustes diferentes, com o
+intuito de verificar a pertinência das conclusões obtidas naquele trabalho,
+assim como acrescentar alguns pontos no que tange ao Campo de Arbítrio do
+avaliador, especialmente em relação à omissão de variável relevante. Também
+foram feitas considerações a respeito do fator oferta. Pretende-se com este
+trabalho deixar detalhes de uma proposta de como poder-se-ia modificar o atual
+consenso da avaliação intervalar numa futura revisão normativa.
 
 # Desenvolvimento e Fundamentação
 
 Nesta seção serão abordados o conceito básico de campo de arbítrio, como
-definido pela @NBR1465302, refletindo sobre as situações em que ele é aplicável 
-e quais seriam as alternativas básicas ao seu uso.
+definido pela @NBR1465302, o conceito de viés devido à omissão de variável
+relevante, tal como prevê o campo de arbítrio, além de questões correlatas, como
+a questão do sobreajuste (*overfitting*) em modelos estatísticos e o *tradeoff*
+entre viés e variância.
 
 ## Campo de Arbítrio do Avaliador
 
@@ -110,42 +112,45 @@ A NBR 14.653-02 [@NBR1465302] define que:
 
 > "_o Campo de Arbítrio pode ser utilizado quando **variáveis relevantes** para
 a avaliação do imóvel **não tiverem sido contempladas no modelo**, por escassez
-de dados de mercado, por inexistência de fatores de homogeinização aplicáveis ou
+de dados de mercado, por inexistência de fatores de homogeneização aplicáveis ou
 porque essas variáveis não se apresentaram estatisticamente significantes em
 modelos de regressão, **desde que a amplitude de até mais ou menos 15% seja
 suficiente para absorver as influências não consideradas e que os ajustes sejam
 justificados**_".
 
-Um ponto levantado por @droubi2019 é que a comparação dos valores arbitrados
-dentro do CA não deveriam ser comparados ao intervalo de confiança da regressão
-linear, pois *o intervalo de confiança é para a média*, ou seja, o intervalo de
-confiança é apenas para aferir a precisão do cálculo dos valores ajustados pela
-reta de regressão (média + variância explicada) e não serve para contemplar
-outros efeitos não calculados pelo modelo para a avaliação do bem-avaliando.
-Para isto, a comparação devida seria com o intervalo de predição, ou seja, o
-intervalo onde se encontram os valores reais observados do mercado e não apenas
-os valores médios (a soma da média e da variância explicada e não-explicada).
+Um ponto levantado por Droubi *et al.* [-@droubi2019] é que a comparação dos
+valores arbitrados dentro do CA não deveriam ser comparados ao intervalo de
+confiança da regressão linear, pois *o intervalo de confiança é para a média*,
+ou seja, o intervalo de confiança é apenas para aferir a precisão do cálculo dos
+valores ajustados pela reta de regressão (média + variância explicada) e não
+serve para contemplar outros efeitos não calculados pelo modelo para a avaliação
+do bem-avaliando. Para isto, a comparação devida seria com o intervalo de
+predição, ou seja, o intervalo onde se encontram os valores reais observados do
+mercado e não apenas os valores médios (a soma da média e da variância explicada
+e não-explicada).
 
 Este primeiro aspecto refere-se mais à questão da avaliação intervalar do que ao
 campo de arbítrio em si, e poderia ser contornado simplesmente com a mudança dos
 critérios da avaliação intervalar, adotando-se critérios mais adequados para a 
 elaboração de intervalos.
 
-Um outro ponto igualmente importante levanto por @droubi2019, porém, diz
-respeito apenas ao CA: o intervalo fixo, de $\pm$ 15%, pode até ser razoável em
-algumas situações, mas pode levar a valores de baixíssima probabilidade de
-ocorrência prática em mercados de baixa variabilidade, ou ainda, pelo contrário,
-num mercado de grande variância, levar a valores que sequer chegam próximos dos
-valores extremos observados no mercado.
+Um outro ponto igualmente importante levanto por Droubi *et al.* [-@droubi2019],
+porém, diz respeito apenas ao CA: o intervalo fixo, de $\pm$ 15%, pode até ser
+razoável em algumas situações, mas pode levar a valores de baixíssima
+probabilidade de ocorrência prática em mercados de baixa variabilidade, ou
+ainda, pelo contrário, num mercado de grande variância, levar a valores que
+sequer chegam próximos dos valores extremos observados no mercado.
 
-Porém, entende-se que @droubi2019 não esclareram completamente os motivos pelos
-quais um mercado pode vir a apresentar um modelo com um intervalo de predição
-tão grande, enquanto noutros o intervalo de predição pode ser mais estreito.
+Porém, entende-se que Droubi *et al.* [-@droubi2019] não esclareceram
+completamente os motivos pelos quais um modelo pode vir a apresentar um
+intervalo de predição tão grande, enquanto noutros o intervalo de predição pode
+ser mais estreito.
 
-Como será visto a seguir, isto pode ser uma questão do próprio mercado, mas 
-também pode estar relacionado às variáveis importantes não contempladas no 
-modelo. Na próxima subseção será analisado um dos fatores que podem levar à
-omissão de variáveis importantes num modelo de avaliação de imóveis.
+Como será visto a seguir, isto pode ser uma questão relacionada apenas ao
+próprio mercado, como defenderam Droubi *et al.* [-@droubi2019], mas também pode
+estar relacionado às variáveis importantes não contempladas no modelo. Na
+próxima subseção será analisado um dos fatores que podem levar à omissão de
+variáveis importantes num modelo de avaliação de imóveis.
 
 ## Escassez de dados de mercado - Micronumerosidade
 
@@ -156,10 +161,10 @@ De acordo com o Anexo A da referida norma, quando da utilização de variáveis
 dicotômicas ou qualitativas, um número mínimo de dados de cada característica,
 variando de 3 a 10, a depender do tamanho da amostra, devem ser efetivamente
 utilizados. Em geral, o número de dados de cada característica ($n_i$) deve ser
-igual a 10% do número total de dados ($n_i > 10\% \ n$) da amostra, limitado a
-um mínimo de 3 dados caso a amostra possua um número total de dados menor do que
-30 ($n<30$) e um limitante superior de 10 dados $n_i > 10$ caso a amostra possua
-um número de dados maior do que 100 ($n > 100$).
+igual a 10% do número total de dados ($n_i \geq 10\% \ n$) da amostra, limitado
+a um mínimo de 3 dados caso a amostra possua um número total de dados menor do
+que 30 ($n<30$) e um limitante superior de 10 dados $n_i \geq 10$ caso a amostra
+possua um número de dados maior do que 100 ($n > 100$).
 
 A NBR 14.653-02 não é clara, no entanto, sobre como proceder no caso de o
 avaliador encontrar em sua amostra um número de dados de uma característica
@@ -180,7 +185,7 @@ normalmente, não se verifica, como será mostrado, e a norma também veda a
 utilização de modelos em que as hipóteses da inferência clássica não se cumpram,
 de acordo com o *caput* do item A.2.
 
-## Inexistência de fatores de homogeinização
+## Inexistência de fatores de homogeneização
 
 Ficou claro durante o [XX Cobreap](http://www.cobreap.com.br/2019/) que grande
 parte dos avaliadores se utiliza do CA para resolver um dos maiores problemas da
@@ -194,26 +199,27 @@ A atual normativa não permite a aplicação de um fator oferta aos dados
 pesquisados, a menos que este fator seja deduzido com a utilização de
 metodologia científica.
 
-No entanto, um modelo econométrico proposto por @horowitz permite a previsão de
-preços de venda a partir de preços de oferta mais precisamente do que os que
-seriam obtidos com um modelo hedônico elaborado à partir dos próprios dados de
-venda.
+No entanto, um modelo econométrico proposto por Horowitz [-@horowitz] permite a
+previsão de preços de venda a partir de preços de oferta mais precisamente do
+que os que seriam obtidos com um modelo hedônico elaborado à partir dos próprios
+dados de venda.
 
-Segundo Horowitz [-@horowitz, 124-125], o modelo econométrico por ele proposto
-pode prever os preços de vendas a partir dos preços de oferta com uma erro médio
-quadrático de apenas \$2.960, enquanto que com um modelo hedônico elaborado a
-partir dos próprios dados de venda foi obtido um erro de \$10.361, ou seja, um 
-erro médio muito maior do que o erro médio obtido com o modelo econométrico 
-proposto.
+Num estudo de caso Horowitz [-@horowitz, 124-125], encontrou um modelo
+econométrico que previu os preços de vendas a partir dos preços de oferta com um
+erro médio quadrático de apenas \$2.960, enquanto que com um modelo hedônico
+elaborado a partir dos próprios dados de venda foi obtido um erro de \$10.361,
+ou seja, um erro médio muito maior do que o erro médio obtido com o modelo
+econométrico proposto.
 
-Está fora do escopo deste trabalho detalhar a abordagem de @horowitz. Contudo, a
-existência de um método capaz de prever preços de venda de imóveis a partir
-apenas de dados de oferta, e com melhor precisão do que um modelo hedônico
-elaborado com os próprios dados de venda é um fator a menos em favor da
-utilização do CA do avaliador. Estudos devem ser levados a cabo e possivelmente
-o modelo tenha que ser adaptado para se ajustar à realidade da prática da
-Engenharia de Avaliações no Brasil, porém a existência de tal abordagem não pode
-permanecer completamente ignorada como é hoje na Engenharia de Avaliações.
+Está fora do escopo deste trabalho detalhar a abordagem de Horowitz
+[-@horowitz]. Contudo, a existência de um método capaz de prever preços de venda
+de imóveis a partir apenas de dados de oferta, e com melhor precisão do que um
+modelo hedônico elaborado com os próprios dados de venda é um fator a menos em
+favor da utilização do CA do avaliador com esta finalidade. Estudos devem ser
+levados a cabo e possivelmente o modelo tenha que ser adaptado para se ajustar à
+realidade da prática da Engenharia de Avaliações no Brasil, porém a existência
+de tal abordagem não pode permanecer completamente ignorada como é hoje na
+Engenharia de Avaliações.
 
 ## Falta de significância dos regressores
 
@@ -244,7 +250,7 @@ entre a variável omitida e as variáveis presentes, como os efeitos da variáve
 omitida são absorvidas pelo termo de erro, a hipótese de independência dos 
 resíduos não será mantida. Segundo Matloff [-@matloff2017, 25], um modelo assim
 é chamado pelos economistas de modelo mal-especificado (*misspecified*), 
-enquanto os estatísticos tratam este tipo viés como viés de modelagem (*model bias*).
+enquanto os estatísticos tratam este de tipo viés como viés de modelagem (*model bias*).
 
 De acordo com Matloff [-@matloff2017, 25], no entanto, isto não quer dizer que
 se trata de um viés que tenha sido adicionado deliberadamente ao modelo, apenas
@@ -290,12 +296,8 @@ Supondo uma amostra com alturas de meninos e meninas, estimar as alturas médias
 de ambas as populações, com variância conhecida igual a $\sigma^2$. De acordo 
 com Matloff, os estimadores naturais seriam:
 
-\begin{equation} \label{eq:boys}
-\hat\mu_1 = \frac{1}{n}\sum_{i=1}^{n}X_i
-\end{equation}
-
-\begin{equation} \label{eq:girls}
-\hat\mu_2 = \frac{1}{n}\sum_{i=1}^{n}Y_i
+\begin{equation} \label{eq:boysandgirls}
+\hat\mu_1 = \frac{1}{n}\sum_{i=1}^{n}X_i \qquad e \qquad \hat\mu_2 = \frac{1}{n}\sum_{i=1}^{n}Y_i
 \end{equation}
 
 Porém, se o número de dados da amostra é pequeno, pode ser melhor simplificar o 
@@ -308,7 +310,7 @@ modelo e utilizar um único estimador para ambos os grupos:
 O critério para a escolha do melhor estimador é o erro médio quadrático (MSE).
 
 Ocorre que o erro médio quadrático para os estimadores das equações 
-\ref{eq:boys} e \ref{eq:girls} é igual à variância dos estimadores, dado que 
+\ref{eq:boysandgirls} é igual à variância dos estimadores, dado que 
 ambos são estimadores não-viesados ($B(\hat \mu_1) = B(\hat \mu_2) = 0$):
 
 \begin{equation} \label{eq:mse1}
@@ -328,16 +330,10 @@ como pode ser visto em @matloff2017 [p. 386-387].
 Desta maneira, para saber qual o melhor estimador, deve-se comparar os valores
 dos erros médios quadráticos obtidos nas equações \ref{eq:mse1} e \ref{eq:mse2}.
 
-Caso:
+Caso $2\frac{\sigma^2}{n} < (\mu_1-\mu_2)^2$, adotam-se os estimadores naturais. 
+Caso contrário, mais vale a pena adotar o estimador único para ambos os grupos.
 
-\begin{equation} \label{eq:mseCompare}
-2\frac{\sigma^2}{n} < (\mu_1-\mu_2)^2 
-\end{equation}
-
-Adotam-se os estimadores naturais. Caso contrário, mais vale a pena adotar o 
-estimador único para ambos os grupos.
-
-Deve-se ter em conta, observando-se a equação \ref{eq:mseCompare}, que:
+Deve-se ter em conta que:
 
 1. se a diferença entre as médias $\mu_1$ e $\mu_2$ é pequena, o estimador único é bem próximo da realidade;
 2. se o número de dados $n$ é pequeno, não há dados suficientes para se estimar com precisão os dois estimadores em separado;
@@ -428,32 +424,36 @@ set.seed(seed)
 area <- c(360, 360, 360, 360, 480, 480, 360, 360, 480, 480)
 situacao <- c(rep(0, 4), rep(1, 2), rep(0, 4))
 VU <- 5000 - 5*area + 250*situacao + rnorm(10, 0, epsilonsd)
-dados <- data.frame(VU, Area = area, Situacao = factor(situacao))
+dados <- data.frame(VU, Area = area, 
+                    Situacao = factor(situacao, 
+                                      levels = c(0, 1), 
+                                      labels = c("Meio de Quadra", "Esquina")
+                                      )
+)
 ```
 
-Para este exemplo os dados foram gerados através da equação \ref{eq:ex1}.
+```{r}
+xtable(dados, 
+       caption = "Dados para o M. 1.",
+       label = "tab:ex1",
+       digits = 0,
+       align = rep("c", 4)) %>%
+  xtable2kable(include.rownames = FALSE) %>%
+  kable_styling(latex_options = "striped",
+                position = "float_right")
+```
+
+Para este exemplo os dados foram gerados através da equação \ref{eq:ex1}, onde
+$\varepsilon \sim \mathcal{N}(0, \,100^2)$:
 
 \begin{equation} \label{eq:ex1}
 VU = 5000 - 5 \cdot Area + 250 \cdot Situacao + \varepsilon
 \end{equation}
 
-Onde $\varepsilon \sim \mathcal{N}(0, \,200^2)$. 
-
-Neste exemplo, seja o caso de se avaliar um lote urbano de esquina com 480$m^2$,
-baseado na amostra exibida na tabela \ref{tab:ex1}, obtida com as simulações,
-onde `Situacao` é uma variável dicotômica que diferencia os imóveis em situação
-de meio de quadra (0) dos imóveis de esquina (1).
-
-```{r}
-xtable(dados, 
-       caption = "Dados para M. 1.",
-       label = "tab:ex1",
-       digits = 0,
-       align = rep("c", 4)) %>%
-  xtable2kable() %>%
-  kable_styling(latex_options = "striped",
-                position = "float_right")
-```
+Seja o caso de se avaliar um lote urbano de esquina com 480$m^2$, baseado na
+amostra exibida na tabela \ref{tab:ex1}, obtida com as simulações, onde
+`Situacao` é uma variável dicotômica que diferencia os imóveis em situação de
+meio de quadra (0) dos imóveis de esquina (1).
 
 De acordo com a NBR 14.653-02, como estão disponíveis apenas 2 dados de mercado
 em situação de esquina, não seria possível a utilização da variável `Situacao`,
@@ -462,7 +462,7 @@ mercado), a norma permite a utilização do CA.
 
 Ou seja, segundo a NBR 14.653-02 leva a crer, poderia ser elaborado um modelo
 com todos os dados amostrais, com a inclusão apenas da variável `Area`,
-omitindo-se a variável `Situacao`e utilizar o CA para majorar o valor estimado
+omitindo-se a variável `Situacao` e utilizar o CA para majorar o valor estimado
 do lote pelo modelo, por este estar em situação de esquina, *desde que a
 amplitude de até mais ou menos 15% seja suficiente para absorver as influências
 não consideradas e que os ajustes sejam justificados*.
@@ -505,18 +505,6 @@ utilizados apenas os dados em situação de meio-de-quadra; e no terceiro modelo
 (coluna 3) foram utilizados todos os dados e foi incluída a variável `Situacao`,
 apesar da micronumerosidade.
 
-Com a primeira abordagem (o modelo da coluna (1)), onde foram misturados dados
-de esquina e de meio de quadra, esperava-se desvios em relação à 
-homoscedasticidade dos resíduos.
-
-No entanto, provavelmente devido à pequena diferença entre os valores dos lotes
-em situação de esquina e dos lotes em situação de meio de quadra, a 
-hipótese da homoscedasticidade não pôde ser rejeitada via teste de Breusch-Pagan:
-
-```{r}
-bptest(fit_a)
-```
-
 O que se percebe é que o primeiro modelo viesou para cima o coeficiente da 
 variável `Area`. Ou seja, o efeito da `Situacao` do lote, que não foi incluso
 no modelo, foi "absorvido" pela outra variável restante, ou seja, a variável 
@@ -538,6 +526,17 @@ Pelo lado da estimação  dos coeficientes, portanto, não se recomenda a
 utilização da primeira abordagem. A segunda abordagem é preferível à primeira,
 porém a terceira abordagem é ainda mais precisa que a segunda.
 
+Com a primeira abordagem (o modelo da coluna 1), onde foram misturados dados de
+esquina e de meio de quadra, esperava-se desvios em relação à homoscedasticidade
+dos resíduos. No entanto, provavelmente devido à pequena diferença entre os
+valores dos lotes em situação de esquina e dos lotes em situação de meio de
+quadra, a hipótese da homoscedasticidade não pôde ser rejeitada via teste de
+Breusch-Pagan:
+
+```{r}
+bptest(fit_a)
+```
+
 ```{r}
 newx <- seq(min(dados$Area), max(dados$Area), by=2.5)
 pred.int1 <- predict(fit_a, newdata = data.frame(Area = newx), 
@@ -546,23 +545,23 @@ pred.int1 <- data.frame(VU = pred.int1, Area = newx)
 ```
 
 ```{r, echo = FALSE}
-# p_a <- Predict(fit_a, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+# p_a <- Predict(fit_a, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
 #                     interval = "confidence", level = .80, vcov.= hccm(fit_a))
-p_a <- Predict(fit_a, newdata = data.frame(Area = 480, Situacao = factor(1)),
+p_a <- predict(fit_a, newdata = data.frame(Area = 480, Situacao = "Esquina"),
                     interval = "confidence", level = .80)
-p_a_1 <- predict(fit_a, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p_a_1 <- predict(fit_a, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
                  interval = "confidence", level = 0.80)
-p1_a <- predict(fit1_a, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p1_a <- predict(fit1_a, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
                 interval = "confidence", level = 0.80)
-p2_a <- predict(fit2_a, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p2_a <- predict(fit2_a, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
                 interval = "confidence", level = 0.80)
-# P_a <- Predict(fit_a, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+# P_a <- Predict(fit_a, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
 #                interval = "prediction", level = 0.80, vcov.= hccm(fit_a))
-P_a <- Predict(fit_a, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P_a <- Predict(fit_a, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
                interval = "prediction", level = 0.80)
-P1_a <- predict(fit1_a, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P1_a <- predict(fit1_a, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
                 interval = "prediction", level = 0.80)
-P2_a <- predict(fit2_a, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P2_a <- predict(fit2_a, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
                 interval = "prediction", level = 0.80)
 amp_a <- amplitude(P_a)
 amp1_a <- amplitude(P1_a)
@@ -598,7 +597,7 @@ plt1 <- ggplot(pred.int1, aes(x = Area, y = VU.fit)) +
 A tabela 3 apresenta o comportamento das diversas abordagens para a previsão de
 novos valores com a utilização dos modelos ajustados. Nesta tabela podem ser
 vistos os valores para a estimativa central e para os limites inferiores e
-superiores do IP (\@80%) e do CA, assim como a amplitude do CA. O valor teórico, 
+superiores do IP (\@80%) e do CA, assim como os limites do CA. O valor teórico, 
 obtido utilizando-se os coeficientes de regressão para a população ($\beta_i$) 
 seria de `r reais()(5000 - 5*480 + 250)`.
 
@@ -610,7 +609,7 @@ qualquer influência de lotes em situação de esquina, ficando a previsão de
 valores para lotes de esquina comprometida. E o **terceiro modelo**, apesar da
 micronumerosidade, foi o que melhor estimou o lote em situação de esquina.
 
-| Abordagem | Estimativa central     |$IP_{inf}$             | $IP_{sup}$              | Amplitude IP    | $CA_{inf}$       | $CA_{sup}$        |
+| Abordagem | Estimativa central     |$IP_{inf}$             | $IP_{sup}$              | Amplitude IP (%)    | $CA_{inf}$       | $CA_{sup}$        |
 |:----------|-----------------------:|----------------------:|------------------------:|----------------:|-----------------:|------------------:|
 | 1         |`r brf(p_a[, "fit"])`   |`r brf(P_a[, "lwr"])`  |  `r brf(P_a[, "upr"])`  | `r brf(amp_a)`  | `r brf(ca_a[1])` | `r brf(ca_a[2])`  |  
 | 2         |`r brf(p1_a[, "fit"])`  | `r brf(P1_a[, "lwr"])`|  `r brf(P1_a[, "upr"])` | `r brf(amp1_a)` | `r brf(ca1_a[1])`| `r brf(ca1_a[2])` |
@@ -629,30 +628,33 @@ set.seed(seed)
 area <- c(360, 360, 360, 360, 480, 480, 360, 360, 480, 480)
 situacao <- c(rep(0, 4), rep(1, 2), rep(0, 4))
 VU <- 5000 - 5*area + 390*situacao + rnorm(10, 0, epsilonsd)
-dados <- data.frame(VU, Area = area, Situacao = factor(situacao))
+dados <- data.frame(VU, Area = area, 
+                    Situacao = factor(situacao, 
+                                      levels = c(0, 1), 
+                                      labels = c("Meio de Quadra", "Esquina"))
+)
 ```
-
-Neste segundo exemplo, foram seguidos exatamente os mesmos passos do exemplo 
-anterior. Contudo, para a geração dos valores, foi utilizado um peso maior para
-os lotes de esquinam, conforme a equação \ref{eq:ex2}:
-
-\begin{equation} \label{eq:ex2}
-VU = 5000 - 5 \cdot area + 390 \cdot situacao + \varepsilon
-\end{equation}
-
-Onde $\varepsilon \sim \mathcal{N}(0, \,200^2)$ 
 
 ```{r}
 xtable(dados, 
-       caption = "Dados para M. 2.",
+       caption = "Dados para o M. 2.",
        label = "tab:ex2",
        digits = 0,
        align = rep("c", 4)) %>%
-  xtable2kable() %>%
+  xtable2kable(include.rownames = FALSE) %>%
   kable_styling(latex_options = "striped", 
                 full_width = F, 
                 position = "float_right")
 ```
+
+Neste segundo exemplo, foram seguidos exatamente os mesmos passos do exemplo 
+anterior. Contudo, para a geração dos valores, foi utilizado um peso maior para
+os lotes de esquina, conforme a equação \ref{eq:ex2}, onde 
+$\varepsilon \sim \mathcal{N}(0, \,100^2)$ :
+
+\begin{equation} \label{eq:ex2}
+VU = 5000 - 5 \cdot area + 390 \cdot situacao + \varepsilon
+\end{equation}
 
 Os dados gerados encontram-se na tabela \ref{tab:ex2}. Deve-se reparar que,
 aqui, erros à parte, foi adicionado R$390,00 ao valor de um lote em situação de
@@ -692,8 +694,8 @@ stargazer::stargazer(fit_b, fit1_b, fit2_b, label = "tab:tab2",
                      intercept.bottom = FALSE, intercept.top = TRUE,
                      decimal.mark = ",", digit.separator = ".",
                      digits = 1, star.cutoffs = c(0.30, 0.20, 0.10),
-                     # se = list(robust_se, NULL, NULL),
-                     # notes = c("Reportados erros robustos para modelo da coluna 1."),
+                     se = list(robust_se, NULL, NULL),
+                     notes = c("Reportados erros robustos para modelo da coluna 1."),
                      notes.label = "Notas:", font.size = "footnotesize")
 # tab_model(fit_b, fit1_b, fit2_b,
 #           dv.labels = c("Modelo 1", "Modelo 2", "Modelo 3"),
@@ -703,21 +705,21 @@ stargazer::stargazer(fit_b, fit1_b, fit2_b, label = "tab:tab2",
 ```
 
 ```{r, echo = FALSE}
-# p_b <- Predict(fit_b, newdata = data.frame(Area = 480, Situacao = factor(1)), 
-#                interval = "confidence", level = 0.80, vcov. = hccm(fit_b))
-p_b <- predict(fit_b, newdata = data.frame(Area = 480, Situacao = factor(1)), 
-               interval = "confidence", level = 0.80)
-p1_b <- predict(fit1_b, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p_b <- Predict(fit_b, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
+              interval = "confidence", level = 0.80, vcov. = hccm(fit_b))
+#p_b <- predict(fit_b, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
+ #              interval = "confidence", level = 0.80)
+p1_b <- predict(fit1_b, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "confidence", level = 0.80)
-p2_b <- predict(fit2_b, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p2_b <- predict(fit2_b, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "confidence", level = 0.80)
-# P_b <- Predict(fit_b, newdata = data.frame(Area = 480, Situacao = factor(1)), 
-#                interval = "prediction", level = 0.80, vcov. = hccm(fit_b))
-P_b <- predict(fit_b, newdata = data.frame(Area = 480, Situacao = factor(1)), 
-               interval = "prediction", level = 0.80)
-P1_b <- predict(fit1_b, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P_b <- Predict(fit_b, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
+              interval = "prediction", level = 0.80, vcov. = hccm(fit_b))
+#P_b <- predict(fit_b, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
+#               interval = "prediction", level = 0.80)
+P1_b <- predict(fit1_b, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "prediction", level = 0.80)
-P2_b <- predict(fit2_b, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P2_b <- predict(fit2_b, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "prediction", level = 0.80)
 amp_b <- amplitude(P_b)
 amp1_b <- amplitude(P1_b)
@@ -727,19 +729,24 @@ ca1_b <- campo_arbitrio(p1_b)
 ca2_b <- campo_arbitrio(p2_b)
 ```
 
-A verificação da homoscedasticidade para a primeira abordagem, neste
-caso, ainda se mantém:
+Com o aumento da diferença de valores médios para os lotes em situação de
+esquina em relação aos lotes em situação de meio de quadra, com o modelo da
+primeira abordagem a homoscedasticidade não pode ser verificada, segundo o teste
+de Breusch-Pagan:
 
 ```{r}
 bptest(fit_b)
 ```
 
 O intervalo de predição \@80% e os limites do CA para os três modelos na tabela
-6. Deve-se notar que, em relação ao primeiro estudo de caso, a amplitude do IP
+6 [^2]. Deve-se notar que, em relação ao primeiro estudo de caso, a amplitude do IP
 para o primeiro modelo aumentou, enquanto a amplitude do IP para o terceiro
 modelo diminuiu. Na segunda abordagem, o que se obtêm é o mesmo modelo do
 primeiro estudo de caso, portanto os intervalos de predição e de CA são
 exatamente os mesmos do caso anterior.
+
+[^2]: O intervalos de predição para o modelo da primeira abordagem foram 
+calculados com a utilização de erros robustos.
 
 ```{r}
 newx <- seq(min(dados$Area), max(dados$Area), by=2.5)
@@ -771,7 +778,7 @@ plt2 <- ggplot(pred.int2, aes(x = Area, y = VU.fit)) +
 ```
 
 
-| Modelo | Estimativa central     |$IP_{inf}$             | $IP_{sup}$              | Amplitude IP    | $CA_{inf}$       | $CA_{sup}$        |
+| Modelo | Estimativa central     |$IP_{inf}$             | $IP_{sup}$              | Amplitude IP (%)    | $CA_{inf}$       | $CA_{sup}$        |
 |:-------|-----------------------:|----------------------:|------------------------:|----------------:|-----------------:|------------------:|
 | 1      |`r brf(p_b[, "fit"])`   |`r brf(P_b[, "lwr"])`  |  `r brf(P_b[, "upr"])`  | `r brf(amp_b)`  | `r brf(ca_b[1])` | `r brf(ca_b[2])`  |  
 | 2      |`r brf(p1_b[, "fit"])`  | `r brf(P1_b[, "lwr"])`|  `r brf(P1_b[, "upr"])` | `r brf(amp1_b)` | `r brf(ca1_b[1])`| `r brf(ca1_b[2])` |
@@ -785,30 +792,33 @@ set.seed(seed)
 area <- c(360, 360, 360, 360, 480, 480, 360, 360, 480, 480)
 situacao <- c(rep(0, 4), rep(1, 2), rep(0, 4))
 VU <- 5000 - 5*area + 780*situacao + rnorm(10, 0, epsilonsd)
-dados <- data.frame(VU, Area = area, Situacao = factor(situacao))
-```
-
-```{r}
-xtable(dados, 
-       digits = 0,
-       label = "tab:ex3",
-       caption = "Dados para M. 3.",
-       align = rep("c", 4))  %>%
-  xtable2kable()  %>% 
-  kable_styling(latex_options = "striped", 
-                full_width = F, 
-                position = "float_right")
+dados <- data.frame(VU, Area = area, 
+                    Situacao = factor(situacao, 
+                                      levels = c(0, 1), 
+                                      labels = c("Meio de Quadra", "Esquina"))
+)
 ```
 
 Neste terceiro caso, foram seguidos exatamente os mesmos passos dos casos
 anteriores. Contudo, para a geração dos valores, foi utilizado um peso maior
-para os lotes de esquina, conforme a equação \ref{eq:ex3}:
+para os lotes de esquina, conforme a equação \ref{eq:ex3}, onde 
+$\varepsilon \sim \mathcal{N}(0, \,100^2)$ :
 
 \begin{equation} \label{eq:ex3}
 VU = 5000 - 5 \cdot area + 780 \cdot situacao + \varepsilon
 \end{equation}
 
-Onde $\varepsilon \sim \mathcal{N}(0, \,200^2)$ 
+```{r}
+xtable(dados, 
+       digits = 0,
+       label = "tab:ex3",
+       caption = "Dados para o M. 3.",
+       align = rep("c", 4))  %>%
+  xtable2kable(include.rownames = FALSE)  %>% 
+  kable_styling(latex_options = "striped", 
+                full_width = F, 
+                position = "float_right")
+```
 
 Os dados gerados encontram-se na tabela \ref{tab:ex3}. Deve-se reparar que,
 aqui, erros à parte, foi adicionado R$780,00 ao valor de um lote em situação de
@@ -818,6 +828,12 @@ meio de quadra, que apresenta valor 'real' de R\$2.600,00. Ou seja, o valor do
 lote que se pretende prever, de 480 $m^2$, em situação de esquina, neste
 mercado, terá valor 'real' de `r reais()(5000 - 5*480 + 780)`. Novamente, então, 
 foram ajustados três modelos, como os descritos no exemplo anterior. 
+
+Na tabela \ref{tab:tab3} são mostrados os coeficientes dos três
+modelos ajustados. Novamente fica claro que: no primeiro modelo (coluna 1), os
+coeficientes ajustados estão viesados, no segundo e no terceiro modelos eles
+estão estimados corretamente, porém o terceiro modelo é mais preciso (menores
+intervalos de confiança).
 
 ```{r, echo = FALSE}
 # fit_c <- lmrob(VU ~ Area, dados, x = TRUE, y = TRUE)
@@ -850,12 +866,6 @@ stargazer::stargazer(fit_c, fit1_c, fit2_c, label = "tab:tab3",
 #           show.intercept = TRUE)
 ```
 
-Na tabela \ref{tab:tab3} são mostrados os coeficientes dos três
-modelos ajustados. Novamente fica claro que: no primeiro modelo (coluna 1), os
-coeficientes ajustados estão viesados, no segundo e no terceiro modelos eles
-estão estimados corretamente, porém o terceiro modelo é mais preciso (menores
-intervalos de confiança).
-
 ```{r}
 newx <- seq(min(dados$Area), max(dados$Area), by=2.5)
 pred.int3 <- predict(fit_c, newdata = data.frame(Area = newx), 
@@ -884,17 +894,17 @@ plt3 <- ggplot(pred.int3, aes(x = Area, y = VU.fit)) +
 ```
 
 ```{r, echo = FALSE}
-p_c <- Predict(fit_c, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p_c <- Predict(fit_c, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
                interval = "confidence", level = 0.80, vcov. = hccm(fit_c))
-p1_c <- predict(fit1_c, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p1_c <- predict(fit1_c, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "confidence", level = 0.80)
-p2_c <- predict(fit2_c, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p2_c <- predict(fit2_c, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "confidence", level = 0.80)
-P_c <- Predict(fit_c, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P_c <- Predict(fit_c, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "prediction", level = 0.80, vcov. = hccm(fit_c))
-P1_c <- predict(fit1_c, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P1_c <- predict(fit1_c, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "prediction", level = 0.80)
-P2_c <- predict(fit2_c, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P2_c <- predict(fit2_c, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "prediction", level = 0.80)
 amp_c <- amplitude(P_c)
 amp1_c <- amplitude(P1_c)
@@ -904,28 +914,16 @@ ca1_c <- campo_arbitrio(p1_c)
 ca2_c <- campo_arbitrio(p2_c)
 ```
 
-Com o aumento da diferença de valores médios para os lotes em situação de
-esquina em relação aos lotes em situação de meio de quadra, com o modelo da
-primeira abordagem a homoscedasticidade não pode ser verificada, segundo o teste
-de Breusch-Pagan:
-
-```{r}
-bptest(fit_c)
-```
-
-O baixo p-valor encontrado indica que o teste rejeita a hipótese nula (da
-homoscedasticidade). 
-
-A presença de heteroscedasticidade também pode ser detectada visualmente através
-da análise da Figura \ref{fig:hetero}: para os lotes de maior área (e menor VU),
-a grande discrepância entre os resíduos dos lotes em situação de esquina
-(resíduos positivos, pontos 5 e 6) e dos resíduos dos lotes em situação de meio
-de quadra (resíduos negativos de menor área) fazem com que a variância dos erros
-naquele ponto sejam maiores do que a variância dos lotes de maior área, causando
-a heteroscedasticidade.
+A presença de heteroscedasticidade mais uma vez pode ser verificada pelo teste
+de Breusch-Pagan (não mostrado), ou também através da análise da Figura
+\ref{fig:hetero}: para oslotes de maior área (e menor VU), a grande discrepância
+entre os resíduos dos lotes em situação de esquina (resíduos positivos, pontos 5
+e 6) e dos resíduos dos lotes em situação de meio de quadra (resíduos negativos
+de menor área) fazem com que a variância dos erros naquele ponto sejam maiores
+do que a variância dos lotes de maior área, causando a heteroscedasticidade.
 
 ```{r hetero, fig.cap = "Gráfico de resíduos vs. valores ajustados."}
-plot(fit_c, which = 1)
+plot(fit_c, which = 1, id.n = 4)
 ```
 
 Ou seja, a análise dos resíduos do modelo indica uma estrutura presente nestes
@@ -933,7 +931,7 @@ resíduos. Como se sabe, esta estrutura ali presente deve-se à variável omitid
 como o modelo foi ajustado considerando dados de diferentes características sem
 uma variável que represente esta mudança de característica, o valor do
 coeficiente da variável `Area` tornou-se uma espécie de média ponderada entre a
-redução real do do valor unitário devido ao aumento da área (para os dados de
+redução real do valor unitário devido ao aumento da área (para os dados de
 meio de quadra) e a redução menor dos valores unitários que ocorre nos dados em
 situação de esquina. Os erros, portanto, apesar de simétricos (há exatamente 2
 dados de cada característica com 480 $m2$) serão maiores, em magnitude, para os
@@ -943,23 +941,25 @@ foram removidos junto com a variável, este modelo resulta homoscedástico (não
 mostrado).
 
 Os intervalos de confiança e predição \@80% para os três modelos, bem como os
-limites do CA podem ser vistos na tabela 8 [^4] abaixo:
+limites do CA podem ser vistos na tabela 9 [^3] abaixo:
 
 
-| Modelo | Estimativa central     |$IP_{inf}$             | $IP_{sup}$              | Amplitude IP    | $CA_{inf}$       | $CA_{sup}$        |
+| Modelo | Estimativa central     |$IP_{inf}$             | $IP_{sup}$              | Amplitude IP (%)    | $CA_{inf}$       | $CA_{sup}$        |
 |:-------|-----------------------:|----------------------:|------------------------:|----------------:|-----------------:|------------------:|
 | 1      |`r brf(p_c[, "fit"])`   |`r brf(P_c[, "lwr"])`  |  `r brf(P_c[, "upr"])`  | `r brf(amp_c)`  | `r brf(ca_c[1])` | `r brf(ca_c[2])`  |  
 | 2      |`r brf(p1_c[, "fit"])`  | `r brf(P1_c[, "lwr"])`|  `r brf(P1_c[, "upr"])` | `r brf(amp1_c)` | `r brf(ca1_c[1])`| `r brf(ca1_c[2])` |
 | 3      |`r brf(p2_c[, "fit"])`  | `r brf(P2_c[, "lwr"])`|  `r brf(P2_c[, "upr"])` | `r brf(amp2_c)` | `r brf(ca2_c[1])`| `r brf(ca2_c[2])` |
 Table: Comparação dos limites do IP e CA para os modelos do Ex. 3.
 
-[^4]: O intervalos de predição para o modelo da primeira abordagem foram 
+[^3]: O intervalos de predição para o modelo da primeira abordagem foram 
 calculados com a utilização de erros robustos.
 
 Deve-se notar que, com a primeira abordagem, como o modelo é viesado, o campo de
 arbítrio ainda resultou suficiente para absorver os efeitos da variável omitida,
 o que não acontece com a segunda abordagem. Para o terceiro modelo, novamente,
 as previsões centrais são boas e o IP é pequeno.
+
+\newpage
 
 ### Mercado 4
 
@@ -968,16 +968,20 @@ set.seed(seed)
 area <- c(360, 360, 360, 360, 480, 480, 360, 360, 480, 480)
 situacao <- c(rep(0, 4), rep(1, 2), rep(0, 4))
 VU <- 5000 - 5*area + 1500*situacao + rnorm(10, 0, epsilonsd)
-dados <- data.frame(VU, Area = area, Situacao = factor(situacao))
+dados <- data.frame(VU, Area = area, 
+                    Situacao = factor(situacao, 
+                                      levels = c(0, 1), 
+                                      labels = c("Meio de Quadra", "Esquina"))
+)
 ```
 
 ```{r}
 xtable(dados, 
        digits = 0,
        label = "tab:ex4",
-       caption = "Dados para M. 4.",
+       caption = "Dados para o M. 4.",
        align = rep("c", 4))  %>%
-  xtable2kable()  %>% 
+  xtable2kable(include.rownames = FALSE)  %>% 
   kable_styling(latex_options = "striped", 
                 full_width = F, 
                 position = "float_right")
@@ -985,21 +989,19 @@ xtable(dados,
 
 Neste quarto caso, foram seguidos exatamente os mesmos passos dos casos
 anteriores. Contudo, para a geração dos valores, foi adotada uma majoração maior
-para os lotes em situação de esquina, conforme \ref{eq:ex4}. O que se buscou foi
-uma situação em que a amplitude do IP para a primeira
-abordagem extrapole a amplitude do CA.
+para os lotes em situação de esquina, conforme \ref{eq:ex4}, onde 
+$\varepsilon \sim \mathcal{N}(0, \,100^2)$ . O que se buscou foi uma situação em 
+que a amplitude do IP para a primeira abordagem extrapole a amplitude do CA.
 
 \begin{equation} \label{eq:ex4}
 VU = 5000 - 5 \cdot Area + 1500 \cdot Situacao + \varepsilon
 \end{equation}
 
-Onde $\varepsilon \sim \mathcal{N}(0, \,200^2)$ 
-
 Os dados gerados encontram-se na tabela \ref{tab:ex4}. Deve-se notar que os
 valores das estimativas centrais para os lotes em estudo, de 480 $m^2$, em
 situação de meio de quadra ou esquina, com este modelo, serão de  
 `r reais()(5000 - 5*480)` e `r reais()(5000 - 5*480 + 1500)`, respectivamente. O
-que se pretende é simular é se num mercado com uma maior variabilidade o campo
+que se pretende é simular se num mercado com uma maior variabilidade o campo
 de arbítrio pode ser uma bom fator limitante. Novamente, então, foram ajustados 
 três modelos, como os descritos no exemplo anterior.
 
@@ -1011,10 +1013,16 @@ intervalos de confiança).
 
 Deve-se notar ainda na tabela \ref{tab:tab4} que o modelo da primeira abordagem,
 visto na coluna (1), apresentou coeficiente de ajuste baixíssimo e coeficiente
-de correlação ajustado negativo. O teste de significância da variável
-independente do modelo não foi significante nem para enquadrar o modelo no grau
-I de fundamentação da NBR 14.653-02. Ainda assim este modelo faz boas previsões
-se utilizado corretamente o IP. 
+de correlação ajustado negativo. É possível mostrar que, de acordo com o teste
+de Breusch-Pagan, a hipótese da homoscedasticidade não pode ser verificada. O 
+teste de significância da variável independente do modelo não foi significante 
+nem para enquadrar omodelo no grau I de fundamentação da NBR 14.653-02. Ainda 
+assim este modelo faz boas previsões se utilizado corretamente o IP. 
+
+Já o modelo da segunda abordagem (coluna 2) tem um coeficiente de ajuste muito
+alto e o modelo tem grau III de fundamentação, segundo a NBR 14.653-02. No 
+entanto, este modelo é totalmente inadequado para fazer previsões fora dos dados
+da amostra, mesmo com a utilização do CA ou do IP.
 
 ```{r, echo = FALSE}
 # fit_d <- lmrob(VU ~ Area, data = dados)
@@ -1028,30 +1036,6 @@ fit2_d <- lm(VU ~ Area + Situacao, dados, x = TRUE, y = TRUE)
 cov1         <- vcovHC(fit_d, type = "HC3")
 robust_se    <- sqrt(diag(cov1))
 ```
-
-
-```{r, results='asis', echo = FALSE}
-stargazer::stargazer(fit_d, fit1_d, fit2_d, label = "tab:tab4", 
-                     title = "Comparação de modelos para o Ex. 4.",
-                     type = type, header = FALSE, table.placement = "H",
-                     ci = TRUE, ci.level = .80, report = "vcst*", single.row = T,
-                     intercept.bottom = FALSE, intercept.top = TRUE,
-                     decimal.mark = ",", digit.separator = ".",
-                     digits = 1, star.cutoffs = c(0.30, 0.20, 0.10),
-                     se = list(robust_se, NULL, NULL),
-                     notes = c("Reportados erros robustos para modelo da coluna 1."),
-                     notes.label = "Notas:", font.size = "footnotesize")
-# tab_model(fit_c, fit1_c, fit2_c,
-#           dv.labels = c("Modelo 1", "Modelo 2", "Modelo 3"),
-#           show.ci = 0.80,
-#           show.stat = TRUE,
-#           show.intercept = TRUE)
-```
-
-Já o modelo da segunda abordagem (coluna (2)) tem um coeficiente de ajuste muito
-alto e o modelo tem grau III de fundamentação, segundo a NBR 14.653-02. No 
-entanto, este modelo é totalmente inadequado para fazer previsões fora dos dados
-da amostra, mesmo com a utilização do CA ou do IP.
 
 ```{r}
 newx <- seq(min(dados$Area), max(dados$Area), by=2.5)
@@ -1084,17 +1068,17 @@ plt4 <- ggplot(pred.int4, aes(x = Area, y = VU.fit)) +
 
 
 ```{r, echo = FALSE}
-p_d <- Predict(fit_d, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p_d <- Predict(fit_d, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
                interval = "confidence", level = 0.80, vcov. = hccm(fit_d))
-p1_d <- predict(fit1_d, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p1_d <- predict(fit1_d, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "confidence", level = 0.80)
-p2_d <- predict(fit2_d, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+p2_d <- predict(fit2_d, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "confidence", level = 0.80)
-P_d <- Predict(fit_d, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P_d <- Predict(fit_d, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
                interval = "prediction", level = 0.80, vcov. = hccm(fit_d))
-P1_d <- predict(fit1_d, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P1_d <- predict(fit1_d, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "prediction", level = 0.80)
-P2_d <- predict(fit2_d, newdata = data.frame(Area = 480, Situacao = factor(1)), 
+P2_d <- predict(fit2_d, newdata = data.frame(Area = 480, Situacao = "Esquina"), 
               interval = "prediction", level = 0.80)
 amp_d <- amplitude(P_d)
 amp1_d <- amplitude(P1_d)
@@ -1105,18 +1089,37 @@ ca2_d <- campo_arbitrio(p2_d)
 ```
 
 O intervalo de predição \@80% para os três modelos, bem como os 
-limites do CA podem ser vistos na tabela 12 [^5] abaixo:
+limites do CA podem ser vistos na tabela 11 [^4] abaixo:
 
 
-| Modelo | Estimativa central     | $IP_{inf}$             | $IP_{sup}$             | Amplitude IP   | $CA_{inf}$       | $CA_{sup}$        |
+| Modelo | Estimativa central     | $IP_{inf}$             | $IP_{sup}$             | Amplitude IP (%)   | $CA_{inf}$       | $CA_{sup}$        |
 |:-------|-----------------------:|-----------------------:|-----------------------:|---------------:|-----------------:|------------------:|
 | 1      |`r brf(p_d[, "fit"])`   | `r brf(P_d[, "lwr"])`  | `r brf(P_d[, "upr"])`  | `r brf(amp_d)` | `r brf(ca_d[1])` | `r brf(ca_d[2])`  |  
 | 2      |`r brf(p1_d[, "fit"])`  | `r brf(P1_d[, "lwr"])` | `r brf(P1_d[, "upr"])` | `r brf(amp1_d)`| `r brf(ca1_d[1])`| `r brf(ca1_d[2])` |
 | 3      |`r brf(p2_d[, "fit"])`  | `r brf(P2_d[, "lwr"])` | `r brf(P2_d[, "upr"])` | `r brf(amp2_d)`| `r brf(ca2_d[1])`| `r brf(ca2_d[2])` |
 Table: Comparação dos limites do IP e CA para os modelos do Ex. 4.
 
-[^5]: Os intervalos de predição e confiança para o modelo da primeira abordagem
+[^4]: Os intervalos de predição e confiança para o modelo da primeira abordagem
 foram calculados com a utilização de erros robustos.
+
+
+```{r, results='asis', echo = FALSE}
+stargazer::stargazer(fit_d, fit1_d, fit2_d, label = "tab:tab4", 
+                     title = "Comparação de modelos para o Ex. 4.",
+                     type = type, header = FALSE, table.placement = "H",
+                     ci = TRUE, ci.level = .80, report = "vcst*", single.row = T,
+                     intercept.bottom = FALSE, intercept.top = TRUE,
+                     decimal.mark = ",", digit.separator = ".",
+                     digits = 1, star.cutoffs = c(0.30, 0.20, 0.10),
+                     se = list(robust_se, NULL, NULL),
+                     notes = c("Reportados erros robustos para modelo da coluna 1."),
+                     notes.label = "Notas:", font.size = "footnotesize")
+# tab_model(fit_c, fit1_c, fit2_c,
+#           dv.labels = c("Modelo 1", "Modelo 2", "Modelo 3"),
+#           show.ci = 0.80,
+#           show.stat = TRUE,
+#           show.intercept = TRUE)
+```
 
 Deve-se notar que, neste mercado, como a majoração do valor unitário de um lote 
 devido a situação esquina é grande, com a primeira abordagem o CA 
@@ -1124,13 +1127,13 @@ resultou insuficiente para absorver os efeitos da variável omitida. A segunda
 abordagem segue com o mesmo modelo. Já  com o terceiro modelo, novamente, as 
 previsões centrais são muito boas e o IP é pequeno.
 
-Na primeira abordagem, deve-se notar que o IP do modelo 
-contém o valor 'real' do lote, enquanto que o intervalo de valores dentro das
-semi-amplitudes de $\pm$ 15% do CA não contém o valor 'real' do lote, já que o
-valor real do lote é $\approx$ 18,5% superior à estimativa do valor central 
-obtida com este modelo (`r brf(p_d[, "fit"])`).
+Na primeira abordagem, deve-se notar que o IP do modelo contém o valor 'real' do 
+lote, enquanto que o intervalo de valores dentro das semi-amplitudes de $\pm$ 
+15% do CA não contém o valor 'real' do lote, já que o valor real do lote é 
+$\approx$ `r pct(P_d[, "upr"]/p_d[, "fit"]-1)` superior à estimativa do valor 
+central obtida com este modelo (`r brf(p_d[, "fit"])`).
 
-### Resumo
+### Síntese
 
 Em suma, para quatro mercados diferentes (4 bairros diferentes, digamos), foram
 testados três tipos de abordagens diferentes: 
@@ -1143,7 +1146,22 @@ situação de esquina, chegando-se assim a um modelo apenas para os lotes em
 situação de meio de quadra;
 
 3. A abordagem de utilizar-se todos os dados e todas as variáveis, apesar disso 
-ir de encontro com a norma vigente, por conta da micronumerosidade.
+não ir ao encontro com o estabelecido pela norma vigente, por conta da 
+micronumerosidade.
+
+Os gráficos dos modelos para os quatro mercados podem ser vistos na Figura
+\ref{fig:modelos}. Nela podem-se ver os dados do modelo acompanhados das retas
+de regressão para a primeira abordagem (linha cheia, em laranja) e para as
+segunda abordagem (em azul). Em cinza pode-se ver as bandas do IP para o modelo
+da primeira abordagem. As linhas laranjas tracejadas representam os limites do
+CA para a primeira abordagem. Deve-se notar que, como da própria definição de
+IP, este possui a propriedade de conter 80% dos dados previstos para o mercado,
+de maneira que, se a variável `Situacao` não está presente no modelo, o IP
+deverá se alargar de maneira a conter 80% dos dados. Já num modelo ajustado com
+todas as variáveis relevantes, esse intervalo é menor, já que a diferença de 
+valores entre dados em situação de esquina e meio de quadra seria explicada pelo 
+efeito da variável adicional e não seria absorvido pelos erros do modelo, como 
+na primeira abordagem.
 
 ```{r modelos, fig.cap="Gráficos dos modelos para os quatro mercados.", out.width="100%"}
 prow <- plot_grid(
@@ -1161,20 +1179,8 @@ legend <- get_legend(
 plot_grid(prow, legend, ncol = 1, rel_heights = c(1, .1))
 ```
 
-Os gráficos dos modelos para os quatro mercados podem ser vistos na Figura
-\ref{fig:modelos}. Nela podem-se ver os dados do modelo acompanhados das retas
-de regressão para a primeira abordagem (linha cheia, em laranja) e para as
-segunda abordagem (em azul). Em cinza pode-se ver as bandas do IP para o modelo
-da primeira abordagem. As linhas laranjas tracejadas representam os limites do
-CA para a primeira abordagem. Deve-se notar que, como da própria definição de
-IP, este possui a propriedade de conter 80% dos dados previstos para o mercado,
-de maneira que, se a variável `Situacao` não está presente no modelo, o IP
-deverá se alargar de maneira a conter 80% dos dados. Num modelo bem ajustado
-esse intervalo é menor, já que outra variável estaria explicando a diferença de
-valores entre dados em situação de esquina e meio de quadra.
-
 Em todos os mercados (bairros) **a terceira abordagem mostrou-se superior**,
-obtendo-se uma valor de estimativa central mais próxima do valor "real", e um
+obtendo-se um valor de estimativa central mais próxima do valor "real", e um
 IP mais estreito, além de um modelo com estimação adequada para os coeficientes.
 
 ```{r}
@@ -1230,6 +1236,18 @@ majoração dos valores das estimativas centrais, que são válidas apenas para 
 tipos de dados permanecentes na amostra, no caso, os dados em situação de 
 meio de quadra.
 
+Finalmente, com a **primeira abordagem**, apesar dos coeficientes serem
+estimados de maneira muito pobre, viesados por conta do efeito da variável
+relevante omitida, o modelo obtido é razoavelmente bom para fazer previsões,
+desde que se faça o uso correto do intervalo de predição. Deve-se ter em mente
+que o modelo não prevê como estimativa de valor central nem o valor para o lote
+em situação de meio de quadra, nem o valor do lote em situação de esquina, mas
+algo entre as duas situações. Para se prever valores dos lotes de meio de quadra
+deve-se minorar os valores das estimativas centrais enquanto que para os lotes
+de esquina, deve-se majorá-las[^5].
+
+[^5]: Essentially, all models are wrong, but some are useful [@Box1986, 424].
+
 | Mercado   | Erro $\hat Y$                   | Erro $\hat Y_{sup}$             | Erro $CA_{sup}$            |
 |:---------:|--------------------------------:|--------------------------------:|---------------------------:|
 | A         | `r pct(p1_a[, "fit"]/2850 - 1)` | `r pct(P1_a[, "upr"]/2850 - 1)` | `r pct(ca1_a[2]/2850 - 1)` |
@@ -1238,32 +1256,13 @@ meio de quadra.
 | D         | `r pct(p1_d[, "fit"]/4100 - 1)` | `r pct(P1_d[, "upr"]/4100 - 1)` | `r pct(ca1_d[2]/4100 - 1)` |
 Table: Erros (%) obtidos com a utilização da segunda abordagem.
 
-\newpage
 
-Finalmente, com a **primeira abordagem**, apesar dos coeficientes serem
-estimados de maneira muito pobre, viesados por conta do efeito da variável
-relevante omitida, o modelo obtido é razoavelmente bom para fazer previsões,
-desde que se faça o uso correto do intervalo de predição. Deve-se ter em mente
-que o modelo não prevê como estimativa de valor central nem o valor para o lote
-em situação de meio de quadra, nem o valor do lote em situação de esquina, mas
-algo entre as duas situações. Para se prever valores dos lotes de meio de quadra
-deve-se minorar os valores das estimativas centrais enquato que para os lotes de
-esquina, deve-se majorá-las[^6].
-
-[^6]: Essentially, all models are wrong, but some are useful [@Box1986, 424]. . 
-
-É possível mostrar que os modelos da primeira abordagem, independente do
-mercado, não apresentam homoscedasticidade, considerado o teste de
-Breusch-Pagan, enquanto os modelos da segunda e terceira abordagem passam no
-teste. Contudo, com os modelos da primeira abordagem é possível fazer boas 
-previsões, enquanto que com os modelos da segunda abordagem isto não é possível.
 
 Com a adoção do limite superior do IP, porém, o erro cometido com a primeira
 abordagem é muito pequeno, independente do mercado estudado, como ilustra a
 tabela abaixo. Os erros que se cometeriam ao se utilizar o limite superior do
 CA, comum na prática da engenharia de avaliações, é muito maior do que o erro
 cometido com a adoção do limite superior do IP.
-
 
 | Mercado   | Erro $\hat Y$                  | Erro $\hat Y_{sup}$            | Erro $CA_{sup}$           |
 |:---------:|-------------------------------:|-------------------------------:|--------------------------:|
@@ -1273,175 +1272,234 @@ cometido com a adoção do limite superior do IP.
 | D         | `r pct(p_d[, "fit"]/4100 - 1)` | `r pct(P_d[, "upr"]/4100 - 1)` | `r pct(ca_d[2]/4100 - 1)` |
 Table: Erros (%) obtidos com a utilização da primeira abordagem.
 
+\newpage
+
 ## Estudo de Caso 2 -- Avaliação intervalar
 
-Os estudos de casos aqui mostrados ainda podem fornecer pistas para uma adoção
-de um intervalo admissível de valores condizente com a teoria estatística.
+No estudo de caso anterior trabalhou-se com o problema da omissão de variável
+relevanto no modelo. No presente estudo de caso será averiguada a previsão de
+valores e avaliação de intervalos admissíveis, devido ao efeito de variáveis
+não-relevantes, isto é, variáveis que agregariam pouco grau de explicação ao
+modelo. Como foi visto na revisão bibliográfica, não se pode acrescentar tantas
+variáveis quanto se deseje a um modelo, já que isso poderia levar a um 
+superajuste do modelo, que seria bom para explicar a amostra de trabalho, mas 
+não o mercado em análise. Desta forma, os (pequenos) efeitos destas variáveis 
+ausentes são absorvidos pelo termo de erro, o que é desejado.
 
-Nos casos apresentados, porém, trabalhou-se com poucas variáveis, portanto a
-omissão de uma das variáveis já impacta fortemente o modelo e as previsões com
-ele obtidas. Na prática, com mais variávieis explicando o mercado, pode ser que
-a omissão de uma variável tenha um impacto mais leve tanto na estimação dos
-coeficientes do modelo, quanto nas previsões. Assim, pode-se imaginar que a 
-omissão de uma variável do modelo possa levar a valores estimados dentro do 
-IP, porém não nos seus extremos, como nos casos apresentados.
+Imagine-se, então, que durante a construção de um modelo sobre uma amostra de 
+mercado de apartamentos em uma zona central de uma cidade qualquer, não foram
+incluídas no modelo uma série de variáveis que, apesar dos seus pequenos
+efeitos, acabam por impactar de alguma forma na formação de preço dos 
+apartamentos (melhor posição solar, melhor ventilação, melhor vista), já que 
+o número de dados da amostra é limitado. 
 
-Imagine-se que se saiba previamente que a amostra de trabalho não seja
-totalmente homogênea (na prática, ela quase nunca será). Para melhor ilustrar
-isto, imagine-se construir um modelo sobre uma amostra de um mercado de
-apartamentos em uma zona central qualquer de uma cidade, onde se saiba que
-existem na amostra alguns imóveis com características melhores que a média
-(melhor posição solar, melhor ventilação, melhor vista), porém estas
-características não foram contempladas no modelo - afinal não se pode fazer um
-modelo que contenha absolutamente todas as características, pois estas seriam
-muitas e o número de dados da amostra é sempre limitado. Além do mais, o que se
-obteria com a modelagem de todas as características da amostra seria um modelo
-com sobreajuste, que não serviria para fazer previsões de valores para dados
-fora da amostra.
+Porém, um avaliador experiente, ciente das limitações do seu modelo, durante a
+avaliação de um apartamento nesta zona central, se deparou com o seguinte 
+problema: o imóvel avaliando possuía, para todas as características não 
+contempladas no modelo, valores acima da média. Por exemplo, imagine-se que o
+imóvel avaliando possuía uma vista privilegiada, uma melhor posição solar e 
+ainda melhor posição em relação aos ventos, de tal maneira que, ao se avaliar 
+tal imóvel pelo valor médio calculado pelo modelo estaria-se notoriamente 
+sub-avaliando o mesmo. No estudo de caso anterior, a utilização do Campo de 
+Arbítrio do Avaliador era possível, já que *variáveis relevantes* não foram 
+*contempladas no modelo *. Neste caso, porém, o problema é diverso: o imóvel
+avaliando não vale mais porque houve a omissão de uma variável relevante, mas 
+sim por uma soma de pequenos efeitos que, somados, tornaram-se relevantes.
 
 ```{r dadosEx5, echo = FALSE}
 set.seed(seed)
-area <- rnorm(150, mean = 200, sd = .25*epsilonsd)
-padrao <- rep(c(1, 2, 3), each = 50)
-VU <- 5000 - 5*area + 250*padrao + rnorm(99, 0, epsilonsd)
-dados <- data.frame(VU, Area = area, Padrao = factor(padrao))
+area <- rnorm(200, mean = 200, sd = .25*epsilonsd)
+padrao <- rep(c(1, 2, 3, 5), each = 50)
+VU <- 5000 - 5*area + 250*padrao + rnorm(200, 0, epsilonsd)
+dados <- data.frame(VU,
+                    Area = area,
+                    Padrao = factor(padrao,
+                                    levels = 1:5,
+                                    labels = c("Muito Baixo", "Baixo", "Médio",
+                                              "Alto", "Muito Alto"))
+                    )
+# dados <- data.frame(VU,
+#                     Area = area,
+#                     Padrao = factor(padrao,
+#                                     levels = 1:5)
+#                     )
 ```
+
 ```{r}
 fit <- lm(VU ~ Area + Padrao, data = dados)
+s <- summary(fit)
 ```
 
-Foram simulados dados conforme a equação \ref{eq:ex5}
+Para melhor ilustrar foram simulados dados conforme a equação \ref{eq:ex5}, onde
+$Padrao_j$ é uma variável qualitativa (dicotômica em grupo) com níveis $j$ 
+variando de 1 a 5 (muito baixo, baixo, médio, alto e muito alto) e 
+$\varepsilon \sim \mathcal{N}(0, \,100^2)$ . Os gráficos do modelo ajustado 
+com os dados simulados podem ser vistos na Figura \ref{fig:modelo}.
 
 \begin{equation} \label{eq:ex5}
-VU = 5000 - 5 \cdot Area + 250 \cdot Padrao + \varepsilon
+VU = 5000 - 5 \cdot Area + 250 \cdot Padrao_j + \varepsilon
 \end{equation}
 
-Onde $\varepsilon \sim \mathcal{N}(0, \,200^2)$ 
-
-É sabido que existe correlação entre as variáveis no Mercado Imobiliário. Se
-um imóvel tem uma vista privilegiada, por exemplo, ele deverá ter um padrão de
-acabamento melhor também. 
-
-Imagine-se agora que se deva prever o valor de um novo imóvel com padrão médio,
-com outras características não modeladas um pouco melhores que a média (uma 
-posição solar melhor, uma vista um pouco mais aberta), de maneira que o avaliador
-opte por utilizar, ao invés da estimativa central, o limite superior do IP.
-
-Os gráficos do modelo ajustado com os dados simulados podem ser vistos na 
-Figura \ref{fig:modelo}
-
-```{r modelo, fig.cap="Modelo ajustado para apartamentos.", fig.width = 9, out.width="80%"}
-p <- plotmod(fit, level = 0.80, interval = "prediction")
-p
+```{r modelo, fig.cap="Modelo ajustado para apartamentos.", fig.width = 9, out.width='70%'}
+plotmod(fit, level = 0.80, interval = "prediction")
 ```
 
 ```{r}
-newdata <- data.frame(Area = c(150, 150, 150), Padrao = factor(c(1, 2, 3)))
-p <- predict(fit, newdata = newdata, interval = "prediction", level = 0.80)
+newdata <- data.frame(Area = rep(150, 4), 
+                      Padrao = c("Muito Baixo", "Baixo", "Médio", "Muito Alto"))
+p <- predict(fit, newdata = newdata, interval = "confidence", level = 0.80)
+P <- predict(fit, newdata = newdata, interval = "prediction", level = 0.80)
 ca <- campo_arbitrio(p)
 ```
 
+Imagine-se agora que o imóvel avaliando conta com área de 200 $m^2$ e padrão
+médio (3). O valor da estimativa central para este imóvel, com este modelo,
+seria de R$ `r brf(p[3, "fit"])` [^6].Imagine-se agora que o avaliador, convicto
+que o valor do imóvel encontra-se acima do valor médio previsto para o modelo
+para um imóvel com aquelas características, resolveu adotar, para o
+imóvel-avaliando o valor do limite superior do intervalo de predição. Para os
+dados simulados, este valor seria igual a `r brf(P[3, "upr"])`. Qual seria,
+então, um intervalo razoável de valores admissíveis?
 
-Para os dados simulados, este valor seria igual a `r brf(p[2, "upr"])`. Qual 
-seria, então, um intervalo razoável de valores admissíveis?
+[^6]: Intervalo de confiança: [`r brf(p[3, "lwr"])`, `r brf(p[3, "upr"])`]
 
-Como limite inferior, pode-se dizer que, com certeza, o imóvel não está abaixo
-da média. Logo, a estimativa de valor central seria um bom indicador de um 
-limite inferior para os valores admissíveis: `r brf(p[2, "fit"])`. E quanto ao
-limite superior? Neste caso, seria razoável adotar o limite superior do CA. Já
-que a NBR não permite que se extrapole os 15% do CA, este é o limite superior do
-intervalo. Caso o limite superior do IP ultrapasse os 15%, este modelo não seria
-aceito, mas caso o limite superior do IP esteja dentro do CA, é razoável que o
-intervalo de valores admissíveis esteja entre o valor central e o limite superior
-do CA, neste caso, `r brf(ca[2, "C.A.S."])`. Em sum, adotando-se os critérios
-acima, o resultado da avaliação seria um intervalo como o abaixo:
+Como limite inferior, pode-se dizer que, muito provavelmente, o imóvel não está
+abaixo da média para aquele padrão [^7]. Logo, o limite inferior do IC para a
+estimativa de valor central seria um bom indicador de um limite inferior para os
+valores admissíveis. E quanto ao limite superior admissível? Neste caso, seria
+razoável adotar o limite superior do CA. Já que a NBR não permite que se
+extrapole os 15% do CA, este é o limite superior do intervalo. Caso o limite
+superior do IP ultrapasse os 15%, esta arbitragem não seria aceita, mas caso o
+limite superior do IP esteja dentro do CA, é razoável que o intervalo de valores
+admissíveis esteja entre o valor central e o limite superior do CA. Em suma, 
+adotando-se estes critérios, o intervalor de valores admissíveis seria coerente, 
+apesar de altamente assimétrico : `r brf(p[3, "lwr"])` $\leq$ 
+`r brf(P[3, "upr"])` $\leq$ `r brf(ca[3, "C.A.S."])` 
 
-`r brf(p[2, "fit"])` $\leq$ `r brf(p[2, "upr"])` $\leq$ `r brf(ca[2, "C.A.S."])`
-
-Por outro lado, se o que se pretende com o modelo seja avaliar um imóvel de
-**alto padrão**, também com vista e posição solar privilegiada, etc., segundo os
-mesmos critérios utilizados para o imóvel de padrão médio, teria-se:
-
-`r brf(p[3, "fit"])` $\leq$ `r brf(p[3, "upr"])` $\leq$ `r brf(ca[3, "C.A.S."])`
-
-E, finalmente, para um imóvel de baixo padrõa, acima da média em relação às 
-outras características, teria-se:
-
-`r brf(p[1, "fit"])` $\leq$ `r brf(p[1, "upr"])` $\leq$ `r brf(ca[1, "C.A.S."])`
-
-Em suma, acredita-se que uma boa melhoria em termos de normatização seria obtida
-se a NBR 14.653 estabelecesse que, para a adoção de valores fora da estimativa
-central seja adotada uma amplitude máxima do IP (\@80%) de 30% e que a adoção de
-um valor diferente da estimativa central seja feita dentro do IP. Além disto,
-que seja reportado um intervalo de valores admissíveis que seja coerente, com
-valor máximo igual à semi-amplitude do CA e valor mínimo igual à estimativa de
-valor central (e vice-versa: se for necessário aplicar uma minoração do valor
-central, que se utilize que como valor mínimo o limite inferior do CA e se adote
-o valor central como limite superior do intervalo de valores admissíveis).
+[^7]: Não faz qualquer sentido, se o avaliador arbitra um valor acima da média
+para o bem-avaliando, depois reportar como admissível um valor abaixo da média! 
+Atualmente, isto é possível, conforme Figura A.2 da NBR 14.653-02 [-@NBR1465302].
 
 Outra opção seria adotar um intervalo admissível sempre simétrico, com
-semi-amplitude igual à menor distância entre o valor adotado e o valor central
-ou ao valor do limite superior/inferior do CA. Neste caso, obteríam-se três 
-intervalos simétricos, ao invés dos intervalos reportados acima:
+semi-amplitude igual à menor distância entre: a) o valor adotado e o valor 
+central, ou; b) o valor adotado e o limite superior/inferior do CA. Parte-se do
+pressuposto que o valor arbitrado é considerado o mais provável pelo avaliador,
+sendo que, em direção aos dois extremos, a probabilidade de ocorrência de valor
+diminui simetricamente.Neste caso, o avaliador obteria, com este modelo, o 
+seguinte intervalo de valores admissíveis: `r brf(p[3, "lwr"])` $\leq$ 
+`r brf(P[3, "upr"])` $\leq$ `r brf(P[3, "upr"] + (P[3, "upr"] - p[3, "lwr"]))`  
 
-`r brf(p[2, "fit"])` $\leq$ `r brf(p[2, "upr"])` $\leq$ `r brf(p[2, "upr"] + (p[2, "upr"] - p[2, "fit"]))`  
+Os dois intervalos podem ser visualizados nas áreas em azul claro na Figura 
+\ref{fig:dists} A (assimétrico) e B (simétrico):
 
-`r brf(p[3, "fit"])` $\leq$ `r brf(p[3, "upr"])` $\leq$ `r brf(p[3, "upr"] + (p[3, "upr"] - p[3, "fit"]))`  
+```{r dists, fig.cap="Distribuição de probabilidades dos intervalos sugeridos.", fig.height = 3, out.width="100%"}
+pl1 <- 
+  xpnorm(c(p[3, "lwr"], ca[3, "C.A.S."]), mean = p[3, "fit"], sd = s$sigma,
+         return = "plot", system = "gg", digits=3) + 
+  theme(legend.position="bottom") + 
+  guides(fill=guide_legend(title="Prob."))
+pl2 <- 
+  xpnorm(c(p[3, "lwr"], P[3, "upr"] + (P[3, "upr"] - p[3, "lwr"])), 
+         mean = p[3, "fit"], sd = s$sigma,
+         return = "plot", system = "gg", digits=3) + 
+  theme(legend.position="bottom") +
+  guides(fill=guide_legend(title=""))
+plot_grid(pl1, 
+          pl2, 
+          labels = "AUTO")
+```
 
-`r brf(p[1, "fit"])` $\leq$ `r brf(p[1, "upr"])` $\leq$ `r brf(p[1, "upr"] + (p[1, "upr"] - p[1, "fit"]))`  
+
+Em suma, acredita-se que uma boa melhoria em termos de normatização seria obtida
+se a NBR 14.653 estabelecesse que, para o caso da arbitragem de valores (fora da
+estimativa central) esta seja feita dentro do IP e do CA, simultaneamente. Além
+disto, que seja reportado um intervalo de valores admissíveis coerente, conforme 
+proposto acima.
+
+Resta, porém, a solução de um outro problema: como foi visto na Figura 
+\ref{fig:modelo}, os dados para este exemplo ainda foram modelados com uma 
+dificuldade adicional, pois não foram inclusos, propositalmente, dados de um 
+padrão em especial, a saber, dados de imóveis de padrão alto (foram excluídos os
+dados simulados com esta característica na confecção do modelo, visando simular 
+que os dados com esta características apresentavam micronumerosidade).
+
+A supressão destes dados ao modelo deixa o avaliador sem condições de
+utilizá-lo para fins de avaliação de imóveis com estas características [^8]. Se
+o avaliador inclui os dados com aquelas características, ainda que em situação
+de micronumerosidade, ele poderá fazer previsões para os imóveis com aquela
+característica, ainda que menos precisas que as previsões feitas para as demais
+características, com número maior de dados. É o que se nota na Figura
+\ref{fig:modelo1}: para a característica 4 (padrão alto), o IP é maior do que
+para as outras características, ou seja, as previsões obtidas com este modelo
+para imóveis com estas características serão menos confiáveis, mas ainda assim é
+melhor do que não poder obter previsão alguma. Pode ser, ainda, que as previsões
+assim obtidas sejam melhores do que as que se obteriam com a interpolação numa
+variável de código alocado. Mais uma vez, entende-se que seria melhor deixar o
+modelo falar: se o intervalo de predição encontrado for muito grande, maior do
+que o CA, descarta-se a utilização do modelo. Se for menor do que o CA, por que
+não utilizá-lo?
+
+[^8]: Seria possível modelar a variável com um código alocado e interpolar, mas
+não é possível fazer isto para variáveis dicotômicas em grupo.
+
+```{r}
+dados <- rbind(
+  dados, 
+  data.frame(VU = c(5000, 5000), Area = c(200, 200), Padrao = c("Alto", "Alto"))
+  )
+fit1 <- lm(VU ~ Area + Padrao, data = dados)
+s1 <- summary(fit1)
+```
+
+```{r}
+newdata <- data.frame(Area = rep(150, 5), Padrao = levels(dados$Padrao))
+p1 <- predict(fit1, newdata = newdata, interval = "prediction", level = 0.80)
+ca <- campo_arbitrio(p1)
+```
+
+```{r modelo1, fig.cap="Modelo com dados em micronumerosidade.", fig.width = 9, out.width='70%'}
+p <- plotmod(fit1, level = 0.80, interval = "prediction")
+#p$plots + theme(legend.title=element_blank())
+p
+```
+
 
 # Conclusão e Recomendações
 
 Primeiramente, deve-se concluir que a micronumerosidade é um critério que
 deveria ser menos rigoroso na normatização. A presença de poucos dados pode
 fazer com que a estimação não seja tão boa, porém a retirada de dados ou omissão
-de variávies relevantes pode ser ainda pior. A princípio, a norma deveria deixar
+de variáveis relevantes pode ser ainda pior. A princípio, a norma deveria deixar
 o modelo dizer se a quantidade de dados é suficiente ou não: no caso da variável
-apresentar significância estatística, por que removê-la?
+apresentar significância estatística, por que removê-la? Além do mais, dados 
+preciosos podem estar sendo jogados fora (no exemplo, 20% deles), o que faz com 
+que a estimação dos outros coeficientes do modelo piorar.
 
-A opção de se retirar os dados em situação de esquina e ajustar um modelo apenas
-para os dados de meio de quadra (segunda abordagem) não se mostrou uma boa
-solução: no final o que se tem é um modelo apenas para lotes em meio de quadra,
-sem qualquer parâmetro para se inferir o valor dos lotes de esquina. Além do 
-mais, dados estão sendo jogados fora (20% deles), o que faz com que a estimação
-dos coeficientes piorar.
-
-A opção de se utilizar a primeira abordagem, omitindo-se a variável com problema
-de micronumerosidade (no caso, `Situacao`) pode ser feita, mas com o devido
-cuidado: o(s) valor(es) do(s) coeficiente(s) estimados para a(s) variável(eis)
-efetivamente utilizada(s) (no caso apenas `Area`) deve(m) ser visto(s) com
-ressalvas, pois nele(s) estão embutidos os efeitos da variável omitida. A
-estimativa central calculada com este modelo encontra-se sempre um pouco abaixo
-ou acima da "real". É mais ou menos como se o modelo de regressão estivesse
-"errado" (todos os modelos estão errados), mas ainda fosse útil (as previsões
-com ele obtidas são razoáveis). O modelo, porém, avalia lotes em meio de quadra
-e lotes de esquina com os mesmos valores. Isto significa que as estimativas
-estarão apenas um pouco maiores para os lotes de meio de quadra e um pouco
-menores para os lotes de esquina. Mas quão maiores/menores? O intervalo de
-predição, nos casos apresentados, mostrou ser um bom parâmetro, enquanto o Campo
-de Arbítrio não se mostrou adequado.
-
-Outra questão a ser revisada pela NBR 14.653-02 é a questão dos desvios em
-relação às hipóteses da inferência clássica: com a omissão de variável
-relevante, conforme demonstrado, o esperado é que algumas hipóteses sejam
-violadas, mas isto não é impeditivo da utilização do modelo: a utilização de 
-erros robustos (Eicker-White) para os intervalos de confiança e predição podem 
-solucionar o problema a contento.
+A opção de apenas remover a variável, mantendo-se os dados, pode ser feita, mas
+com o devido cuidado: o(s) valor(es) do(s) coeficiente(s) estimados para a(s)
+variável(eis) efetivamente utilizada(s) deve(m) ser visto(s) com ressalvas, pois
+nele(s) estão embutidos os efeitos da variável omitida. Além do mais, para que
+isto seja possível, é necessário rever outros itens da NBR 14.653-02,
+relacionados aos desvios em relação às hipóteses da inferência clássica: com a
+omissão de variável relevante, conforme demonstrado, o esperado é que algumas
+hipóteses sejam violadas, mas isto não é impeditivo da utilização do modelo: a
+utilização de erros robustos (Eicker-White) para estimar os intervalos de
+confiança e predição podem solucionar o problema a contento [ver @zonato2018]. É
+necessário, contudo, normatizar este procedimento.
 
 Com relação ao Campo de Arbítrio do Avaliador, a princípio entende-se que este
 deva ser mantido na NBR 14.653-02, até por compatilidade com as outras partes da
-da NBR 14.653, mas também por compatibilidade com os outros métodos não 
-estatísticos, como os métodos de avaliação por fatores. 
-
-A sua aplicação, contudo, deveria ser revista: primeiramente, entende-se que é
-um erro a livre utilização de todo o intervalo do CA sem um critério que possa
-dar embasamento a esta utilização. A amplitude máxima do CA deveria ser mantida,
-porém como limitante superior/inferior para os intervalos de valores
-admissíveis, não como uma opção de livre escolha para o avaliador adotar
-qualquer valor dentro deste intervalo, como ocorre na atual normatização. Seria
-boa regra permitir ao avaliador que adote valores dentro do CA, porém limitados
-aos valores do Intervalo de Predição do modelo de regressão linear. Ou, de outra
-forma, que seja permitido ao avaliador adotar qualquer valor dentro do IP, desde
-que este esteja dentro do intervalo de mais ou menos 15% da estimativa central.
+NBR 14.653, mas também por compatibilidade com os outros métodos, como os
+métodos de avaliação por fatores. A sua aplicação, contudo, deveria ser revista:
+primeiramente, entende-se que é um erro a livre utilização de todo o intervalo
+do CA sem um critério que possa dar embasamento a esta utilização. A amplitude
+máxima do CA deveria ser mantida, porém como limitante superior/inferior para os
+intervalos de valores admissíveis, não como uma opção de livre escolha para o
+avaliador arbitrar qualquer valor dentro deste intervalo, como ocorre na atual
+normatização. Entende-se que seria boa regra permitir ao avaliador que arbire
+valores limitados simultaneamente pelo CA e pelo IP, utilizando os limites
+destes intervalos como limites do intervalo de valores admissíveis, deixando
+claro que a probabilidade de ocorrência diminui (simetricamente) à medida que se
+afasta do valor arbitrado.
 
 # Referências {-}
