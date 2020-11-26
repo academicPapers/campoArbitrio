@@ -196,22 +196,6 @@ letter} -- Blaise Pascal *apud* @matloff2017.
 
 ## Seleção de Variáveis
 
-### Não há Panaceia!
-
-> **There is No Panacea!**  
->Choosing a subset of predictors on the basis of cross-validation, AIC and so on
-is not foolproof by any means. Due to the Principle of Frequent Occurrence of 
-Rare Events (Section 7.6.1), some subsets may look very goot yet actually be 
-artifacts.  
->On a theoretical basis, it has been shown that LOOM is not statiscally 
-consistent [128]. That paper does find conditions under which one gets 
-consistency by leaving $w$ out rather than 1, providing $w/n \rightarrow 1$,
-but it is not clear what the pratical implications are. Empirical doubt on 
-cross-validation was cast in [118].
-> [@matloff2017, 348]
-
-
-
 <!-- ```{r, fig.cap="Capacidade do modelo. Fonte: \\textcite{odriscoll2019physics}."} -->
 <!-- knitr::include_graphics("../../images/Model-complexity-vs-Total-Error.jpg") -->
 <!-- ``` -->
@@ -285,6 +269,17 @@ P1 <- predict(fit1, newdata = new, interval = "prediction", level = .80)
 >- Modelo com variável suítes, IP: `r brf(exp(P))`; Amplitude: `r brf(amplitude(exp(P)))`%
 >- Modelo sem variável suítes, IP: `r brf(exp(P1))`; Amplitude: `r brf(amplitude(exp(P1)))`%
 
+>- **There is No Panacea!**  
+>- Choosing a subset of predictors on the basis of cross-validation, AIC and so on
+is not foolproof by any means. Due to the Principle of Frequent Occurrence of 
+Rare Events (Section 7.6.1), some subsets may look very good yet actually be 
+artifacts.  
+>- On a theoretical basis, it has been shown that LOOM is not statiscally 
+consistent [128]. That paper does find conditions under which one gets 
+consistency by leaving $w$ out rather than 1, providing $w/n \rightarrow 1$,
+but it is not clear what the pratical implications are. Empirical doubt on 
+cross-validation was cast in [118].
+>- [@matloff2017, 348]
 
 ## Justificativa para arbitragem de valores fora da média
 

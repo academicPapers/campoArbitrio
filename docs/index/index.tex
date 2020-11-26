@@ -445,24 +445,6 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 \begin{frame}{Seleção de Variáveis}
 \protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis}{}
 
-\begin{block}{Não há Panaceia!}
-
-\begin{quote}
-\textbf{There is No Panacea!}\\
-Choosing a subset of predictors on the basis of cross-validation, AIC
-and so on is not foolproof by any means. Due to the Principle of
-Frequent Occurrence of Rare Events (Section 7.6.1), some subsets may
-look very goot yet actually be artifacts.\\
-On a theoretical basis, it has been shown that LOOM is not statiscally
-consistent {[}128{]}. That paper does find conditions under which one
-gets consistency by leaving \(w\) out rather than 1, providing
-\(w/n \rightarrow 1\), but it is not clear what the pratical
-implications are. Empirical doubt on cross-validation was cast in
-{[}118{]}. \autocite[348]{matloff2017}
-\end{quote}
-
-\end{block}
-
 \end{frame}
 
 \begin{frame}{Seleção de Variáveis}
@@ -527,6 +509,26 @@ implications are. Empirical doubt on cross-validation was cast in
 \item
   Modelo sem variável suítes, IP: 988.870,76, 821.719,16, 1.190.023,82;
   Amplitude: 37,24\%
+\end{itemize}
+
+\begin{itemize}[<+->]
+\tightlist
+\item
+  \textbf{There is No Panacea!}\\
+\item
+  Choosing a subset of predictors on the basis of cross-validation, AIC
+  and so on is not foolproof by any means. Due to the Principle of
+  Frequent Occurrence of Rare Events (Section 7.6.1), some subsets may
+  look very good yet actually be artifacts.\\
+\item
+  On a theoretical basis, it has been shown that LOOM is not statiscally
+  consistent {[}128{]}. That paper does find conditions under which one
+  gets consistency by leaving \(w\) out rather than 1, providing
+  \(w/n \rightarrow 1\), but it is not clear what the pratical
+  implications are. Empirical doubt on cross-validation was cast in
+  {[}118{]}.
+\item
+  \autocite[348]{matloff2017}
 \end{itemize}
 
 \end{frame}
