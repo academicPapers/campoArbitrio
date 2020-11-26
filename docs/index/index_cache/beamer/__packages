@@ -1,0 +1,15 @@
+base
+lattice
+ggplot2
+Matrix
+dplyr
+ggstance
+ggformula
+mosaicData
+ggridges
+cowplot
+truncnorm
+SparseM
+quantreg
+appraiseR
+sf

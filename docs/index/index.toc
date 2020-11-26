@@ -1,0 +1,10 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {brazil}{}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {1}{Regressão Linear}{3}{0}{1}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {2}{Por que arbitrar um valor diferente da média condicional?}{32}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {3}{Estudos de casos}{68}{0}{3}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {4}{Conclusões}{79}{0}{4}
