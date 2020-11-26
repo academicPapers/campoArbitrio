@@ -1,6 +1,6 @@
 ---
 title: "Crítica ao uso do Campo de Arbítrio do Avaliador"
-subtitle:  "Devido à escassez de dados de mercado"
+subtitle:  "em situações de escassez de dados de mercado"
 author: 
   - Luiz F. P. Droubi^[SPU/SC, lfpdroubi@gmail.com]
   - Carlos Augusto Zilli^[IFSC, carlos.zilli@ifsc.edu.br]
@@ -1341,7 +1341,7 @@ VU = 5000 - 5 \cdot Area + 250 \cdot Padrao_j + \varepsilon
 \end{equation}
 
 ```{r modelo, fig.cap="Modelo ajustado para apartamentos.", fig.width = 9, out.width='70%'}
-plotmod(fit, level = 0.80, interval = "prediction")
+appraiseR::plotModel(fit, level = 0.80, interval = "prediction")
 ```
 
 ```{r}
@@ -1458,7 +1458,7 @@ ca <- campo_arbitrio(p1)
 ```
 
 ```{r modelo1, fig.cap="Modelo com dados em micronumerosidade.", fig.width = 9, out.width='70%'}
-p <- plotmod(fit1, level = 0.80, interval = "prediction")
+p <- appraiseR::plotModel(fit1, level = 0.80, interval = "prediction")
 #p$plots + theme(legend.title=element_blank())
 p
 ```
