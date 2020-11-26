@@ -256,7 +256,7 @@
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\linewidth]{index_files/figure-beamer/qr-1} 
+{\centering \includegraphics[width=0.5\linewidth]{images/qr-1} 
 
 }
 
@@ -445,33 +445,73 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 \begin{frame}{Seleção de Variáveis}
 \protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis}{}
 
-\begin{center}\includegraphics[width=0.7\linewidth]{../../images/modelo} \end{center}
+\begin{block}{Não há Panaceia!}
+
+\begin{quote}
+\textbf{There is No Panacea!}\\
+Choosing a subset of predictors on the basis of cross-validation, AIC
+and so on is not foolproof by any means. Due to the Principle of
+Frequent Occurrence of Rare Events (Section 7.6.1), some subsets may
+look very goot yet actually be artifacts.\\
+On a theoretical basis, it has been shown that LOOM is not statiscally
+consistent {[}128{]}. That paper does find conditions under which one
+gets consistency by leaving \(w\) out rather than 1, providing
+\(w/n \rightarrow 1\), but it is not clear what the pratical
+implications are. Empirical doubt on cross-validation was cast in
+{[}118{]}. \autocite[348]{matloff2017}
+\end{quote}
+
+\end{block}
 
 \end{frame}
 
 \begin{frame}{Seleção de Variáveis}
 \protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis-1}{}
 
-\begin{figure}
-
-{\centering \includegraphics[width=0.8\linewidth]{index_files/figure-beamer/regsub2-1} 
-
-}
-
-\caption{Seleção de Variáveis baseada em critérios de qualidade.}\label{fig:regsub2}
-\end{figure}
+\begin{center}\includegraphics[width=0.7\linewidth]{../../images/modelo} \end{center}
 
 \end{frame}
 
 \begin{frame}{Seleção de Variáveis}
 \protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis-2}{}
 
-\begin{center}\includegraphics[width=0.7\linewidth]{index_files/figure-beamer/unnamed-chunk-7-1} \end{center}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{images/regsub2-1} 
+
+}
+
+\caption{Seleção de Variáveis baseada em critérios de qualidade.}\label{fig:regsub2}
+\end{figure}
+
+\begin{itemize}[<+->]
+\tightlist
+\item
+  Variável possui significância estatística, porém seu efeito é muito
+  pequeno.
+\item
+  A tendência é que, com maior número de dados, mais e mais variáveis
+  como esta sejam obtidas.
+\end{itemize}
 
 \end{frame}
 
 \begin{frame}{Seleção de Variáveis}
 \protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis-3}{}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.7\linewidth]{images/regsub-1} 
+
+}
+
+\caption{Variáveis escolhidas por método exaustivo.}\label{fig:regsub}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Seleção de Variáveis}
+\protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis-4}{}
 
 \begin{itemize}[<+->]
 \tightlist
@@ -491,15 +531,15 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 
 \end{frame}
 
-\begin{frame}{Exemplo}
-\protect\hypertarget{exemplo}{}
+\begin{frame}{Justificativa para arbitragem de valores fora da média}
+\protect\hypertarget{justificativa-para-arbitragem-de-valores-fora-da-muxe9dia}{}
 
 \begin{itemize}[<+->]
 \tightlist
 \item
   Na impossibilidade de se modelar todas as variáveis, cabe ao
   profissional de Engenharia de Avaliações identificar quando um imóvel
-  tem valor acima ou abaixo da média do mercado
+  tem valor acima ou abaixo da média do mercado estimada pelo modelo.
 
   \begin{itemize}[<+->]
   \tightlist
@@ -528,6 +568,9 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
       O valor médio estimado pelo modelo é R\$100,00/\(m^2\)
     \item
       É justo avaliá-los com o valor médio?
+    \item
+      Ou seria mais justo utilizar o primeiro e o nono decil da
+      distribuição de probabilidades?
     \end{itemize}
   \end{itemize}
 \end{itemize}
@@ -546,7 +589,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 
 }
 
-\caption{Omissão de variável relevante: quatro exemplos ilustrativos. Fonte: os autores.}\label{fig:unnamed-chunk-9}
+\caption{Omissão de variável relevante: quatro exemplos ilustrativos. Fonte: os autores.}\label{fig:unnamed-chunk-8}
 \end{figure}
 
 \end{frame}
@@ -600,7 +643,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 
 }
 
-\caption{Micronumerosidade: perda de informação no modelo. Fonte: os autores.}\label{fig:unnamed-chunk-10}
+\caption{Micronumerosidade: perda de informação no modelo. Fonte: os autores.}\label{fig:unnamed-chunk-9}
 \end{figure}
 
 \begin{itemize}[<+->]
@@ -626,7 +669,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 
 }
 
-\caption{Pequeno número de dados: Estimação pobre. Fonte: os autores.}\label{fig:unnamed-chunk-11}
+\caption{Pequeno número de dados: Estimação pobre. Fonte: os autores.}\label{fig:unnamed-chunk-10}
 \end{figure}
 
 \begin{itemize}[<+->]
@@ -642,11 +685,11 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.5\linewidth]{index_files/figure-beamer/unnamed-chunk-12-1} 
+{\centering \includegraphics[width=0.5\linewidth]{images/avalInterv-1} 
 
 }
 
-\caption{Avaliação Intervalar. Intervalos incoerentes.}\label{fig:unnamed-chunk-12}
+\caption{Avaliação Intervalar. Intervalos incoerentes.}\label{fig:avalInterv}
 \end{figure}
 
 \begin{itemize}[<+->]
@@ -667,7 +710,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 
 }
 
-\caption{Estimação intervalar: uma abordagem probabilística. Fonte: os autores.}\label{fig:unnamed-chunk-13}
+\caption{Estimação intervalar: uma abordagem probabilística. Fonte: os autores.}\label{fig:unnamed-chunk-11}
 \end{figure}
 
 \begin{itemize}[<+->]
