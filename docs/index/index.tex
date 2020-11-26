@@ -232,12 +232,16 @@
   Sir Francis \textcite[p.~62]{galton}
   \autocite[\emph{apud}][p.~350]{koenker2000} criticou os seus colegas
   que:
-\item
-  \emph{limitam suas investigações a médias, e não parecem se deleitar com visões
-  mais abrangentes. Suas almas parecem tão enfadonhas ao encanto da variedade 
-  quanto ao de um nativo de um de nossos condados ingleses planos, cuja 
-  retrospectiva da Suíça foi que, se as montanhas pudessem ser jogadas em seus 
-  lagos, dois incômodos seriam removidos de uma só vez.}
+
+  \begin{itemize}[<+->]
+  \tightlist
+  \item
+    \emph{limitam suas investigações a médias, e não parecem se deleitar com
+    visões mais abrangentes. Suas almas parecem tão enfadonhas ao encanto da
+    variedade quanto ao de um nativo de um de nossos condados ingleses planos, cuja
+    retrospectiva da Suíça foi que, se as montanhas pudessem ser jogadas em seus
+    lagos, dois incômodos seriam removidos de uma só vez.}
+  \end{itemize}
 \item
   Estimação é para parâmetros da população (média, variância,
   coeficientes, \ldots)
@@ -247,8 +251,8 @@
 
 \end{frame}
 
-\begin{frame}{Estimação vs.~previsão de valores}
-\protect\hypertarget{estimauxe7uxe3o-vs.-previsuxe3o-de-valores-1}{}
+\begin{frame}{Estimação: outros quantis de dados}
+\protect\hypertarget{estimauxe7uxe3o-outros-quantis-de-dados}{}
 
 \begin{figure}
 
@@ -262,18 +266,30 @@
 \end{frame}
 
 \begin{frame}{Estimação vs.~previsão de valores}
-\protect\hypertarget{estimauxe7uxe3o-vs.-previsuxe3o-de-valores-2}{}
+\protect\hypertarget{estimauxe7uxe3o-vs.-previsuxe3o-de-valores-1}{}
 
 \begin{itemize}[<+->]
 \tightlist
 \item
-  NBR 14.653-02 \autocite{NBR1465302} parece misturar as coisas
+  A NBR 14.653-02\autocite{NBR1465302} parece ter também este
+  entendimento:
+
+  \begin{itemize}[<+->]
+  \tightlist
+  \item
+    \textbf{8.2.1.5.4} O campo de arbítrio não se confunde com o
+    intervalo de confiança de 80 \% calculado para definir o grau de
+    precisão da estimativa.
+  \end{itemize}
+\item
+  No Anexo A, no entanto, a NBR 14.653-02 \autocite{NBR1465302} parece
+  misturar as coisas:
 
   \begin{itemize}[<+->]
   \item
-    A.10.1.2 Quando for adotado o valor arbitrado, o intervalo de
-    valores admissíveis deve estar limitado simultaneamente (ver Figura
-    A.2):\\
+    \textbf{A.10.1.2} Quando for adotado o valor arbitrado, o intervalo
+    de valores admissíveis deve estar limitado simultaneamente (ver
+    Figura A.2):\\
   \item
     \begin{enumerate}[<+->]
     [a)]
@@ -333,7 +349,8 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 \tightlist
 \item
   \emph{\textbf{Características próprias não contempladas no modelo}}
-  vs.~ \emph{\textbf{variáveis relevantes não contempladas no modelo.}}
+  \emph{vs.}
+  \emph{\textbf{variáveis relevantes não contempladas no modelo.}}
 \end{itemize}
 
 \end{frame}
@@ -361,67 +378,6 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 \item
   Mesmos variáveis com significância estatística podem ter que ser
   retiradas do modelo
-\item
-  A NBR 14.653-2 prevê a utilização do CA
-\item
-  Entendemos que o CA pode ser um bom fator limitante
-\item
-  Mas não dá qualquer parâmetro para a previsão de valores
-
-  \begin{itemize}[<+->]
-  \tightlist
-  \item
-    P. Ex.: Lote em situação de esquina, sem variável situação
-  \item
-    Para isto, pode-se utilizar o CA. Mas em qual magnitude?
-  \item
-    Quanto a posição na quadra valoriza o lote em relação à situação de
-    meio-de-quadra?
-  \item
-    Intervalos de Predição podem ser instrutivos
-  \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-\begin{frame}{Seleção de Variáveis}
-\protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis}{}
-
-\begin{center}\includegraphics[width=0.7\linewidth]{../../images/modelo} \end{center}
-
-\end{frame}
-
-\begin{frame}{Seleção de Variáveis}
-\protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis-1}{}
-
-\begin{figure}
-
-{\centering \includegraphics[width=0.7\linewidth]{../../images/regsub2-1} 
-
-}
-
-\caption{Seleção de Variáveis baseada em critérios de ajuste.}\label{fig:unnamed-chunk-3}
-\end{figure}
-
-\end{frame}
-
-\begin{frame}{Seleção de Variáveis}
-\protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis-2}{}
-
-\begin{itemize}[<+->]
-\tightlist
-\item
-  Modelo com variável suítes, IC: 961.660,64, 924.768,13, 1.000.024,94;
-  Amplitude: 7,83\%
-\item
-  Modelo sem variável suítes, IC: 988.870,76, 955.381,88, 1.023.533,52;
-  Amplitude: 6,89\%
-\item
-  Modelo com variável suítes, IP: 961.660,64, 802.017,63, 1.153.080,88;
-  Amplitude: 36,51\%
-\item
-  Modelo sem variável suítes, IP: 988.870,76, 821.719,16, 1.190.023,82;
-  Amplitude: 37,24\%
 \end{itemize}
 
 \end{frame}
@@ -437,7 +393,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 
 }
 
-\caption{Viés e Variância. Fonte: \textcite{ghojogh2019theory}.}\label{fig:unnamed-chunk-6}
+\caption{Viés e Variância. Fonte: \textcite{ghojogh2019theory}.}\label{fig:unnamed-chunk-2}
 \end{figure}
 
 \end{block}
@@ -453,7 +409,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 
 }
 
-\caption{Overfitting. Fonte: \textcite{ghojogh2019theory}.}\label{fig:unnamed-chunk-7}
+\caption{Overfitting. Fonte: \textcite{ghojogh2019theory}.}\label{fig:unnamed-chunk-3}
 \end{figure}
 
 \end{frame}
@@ -473,7 +429,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 
 }
 
-\caption{Capacidade do modelo. Fonte: autor desconhecido.}\label{fig:unnamed-chunk-8}
+\caption{Capacidade do modelo. Fonte: autor desconhecido.}\label{fig:unnamed-chunk-4}
 \end{figure}
 
 \begin{itemize}[<+->]
@@ -482,6 +438,55 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
   Moral da estória:
   \emph{If I had more time, I would have written a shorter
   letter} -- Blaise Pascal \emph{apud} \textcite{matloff2017}.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Seleção de Variáveis}
+\protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis}{}
+
+\begin{center}\includegraphics[width=0.7\linewidth]{../../images/modelo} \end{center}
+
+\end{frame}
+
+\begin{frame}{Seleção de Variáveis}
+\protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis-1}{}
+
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{index_files/figure-beamer/regsub2-1} 
+
+}
+
+\caption{Seleção de Variáveis baseada em critérios de qualidade.}\label{fig:regsub2}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Seleção de Variáveis}
+\protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis-2}{}
+
+\begin{center}\includegraphics[width=0.7\linewidth]{index_files/figure-beamer/unnamed-chunk-7-1} \end{center}
+
+\end{frame}
+
+\begin{frame}{Seleção de Variáveis}
+\protect\hypertarget{seleuxe7uxe3o-de-variuxe1veis-3}{}
+
+\begin{itemize}[<+->]
+\tightlist
+\item
+  Modelo com variável suítes, IC: 961.660,64, 924.768,13, 1.000.024,94;
+  Amplitude: 7,83\%
+\item
+  Modelo sem variável suítes, IC: 988.870,76, 955.381,88, 1.023.533,52;
+  Amplitude: 6,89\%
+\item
+  Modelo com variável suítes, IP: 961.660,64, 802.017,63, 1.153.080,88;
+  Amplitude: 36,51\%
+\item
+  Modelo sem variável suítes, IP: 988.870,76, 821.719,16, 1.190.023,82;
+  Amplitude: 37,24\%
 \end{itemize}
 
 \end{frame}
@@ -507,18 +512,20 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
     \item
       Um possui melhor pedologia (\(Ped\))
     \item
-      Outro possui melhor topografia (\(Topo\))
+      Outro possui melhor Topografia (\(Topo\))
     \item
       Outro possui melhor Posição na Quadra (\(PQ\))
     \item
-      Outro tem melhor posição solar (\(PS\))
+      Outro tem melhor Posição Solar (\(PS\))
     \item
       Devido a estas pequenas diferenças, \(\varepsilon \ne 0\)
     \item
-      Porém, alguns lotes tem melhor
+      Porém, um lote em específico pode ter melhor
       \(Ped, Topo, PQ \,\textbf{e}\, PS\).
     \item
-      Enquanto outros tem pior \(Ped, Topo, PQ \,\textbf{e}\, PS\).
+      Enquanto outro pode ter pior \(Ped, Topo, PQ \,\textbf{e}\, PS\).
+    \item
+      O valor médio estimado pelo modelo é R\$100,00/\(m^2\)
     \item
       É justo avaliá-los com o valor médio?
     \end{itemize}
@@ -542,10 +549,38 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 \caption{Omissão de variável relevante: quatro exemplos ilustrativos. Fonte: os autores.}\label{fig:unnamed-chunk-9}
 \end{figure}
 
+\end{frame}
+
+\begin{frame}{Omissão de variável relevante}
+\protect\hypertarget{omissuxe3o-de-variuxe1vel-relevante-1}{}
+
 \begin{itemize}
 \tightlist
 \item
   Qual o valor de um lote dado que \(A = 480 \, e\, PQ = 1\)
+\end{itemize}
+
+\begin{itemize}[<+->]
+\tightlist
+\item
+  A NBR 14.653-2 prevê a utilização do CA
+\item
+  Entendemos que o CA pode ser um bom fator limitante
+\item
+  Mas não dá qualquer parâmetro para a previsão de valores
+
+  \begin{itemize}[<+->]
+  \tightlist
+  \item
+    P. Ex.: Lote em situação de esquina, sem variável situação
+  \item
+    Pode-se utilizar o CA. Mas em qual magnitude?
+  \item
+    Quanto a posição na quadra valoriza o lote em relação à situação de
+    meio-de-quadra?
+  \item
+    Intervalos de Predição podem ser instrutivos
+  \end{itemize}
 \end{itemize}
 
 \end{frame}
@@ -571,7 +606,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 \begin{itemize}[<+->]
 \tightlist
 \item
-  \alert<2>{Quanto vale imóvel de alto padrão?}
+  \alert<2>{Quanto vale imóvel de Padrão Alto? (Com código alocado seria possível \cite[A.6]{NBR1465302})}
 \end{itemize}
 
 \end{frame}
@@ -597,7 +632,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 \begin{itemize}[<+->]
 \tightlist
 \item
-  \alert<2>{$Var(VU|Padrao = alto) > Var(VU| Padrao \ne alto)$}
+  \alert<2>{$Var(VU|Padrao = Alto) > Var(VU| Padrao \ne Alto)$. Se atende GP, por que não?}
 \end{itemize}
 
 \end{frame}
@@ -674,7 +709,7 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 \item
   \alert<2>{A NBR 14653-2 \citeyear{NBR1465302} permite que o CA seja 
   utilizado apenas quando da omissão de variável relevante. Esta exigência não 
-  consta na parte 1 \citeyear{NBR1465301}}
+  consta na NBR 14653-1 \citeyear{NBR1465301}.}
 \end{itemize}
 
 \begin{itemize}[<+->]
@@ -687,19 +722,21 @@ condicional?}\label{por-que-arbitrar-um-valor-diferente-da-muxe9dia-condicional}
 \begin{itemize}[<+->]
 \tightlist
 \item
-  \alert<4>{O IC não é um bom parâmetro para a arbitragem de valores.}
+  \alert<4>{O IC não é um bom parâmetro para a arbitragem de valores para novos
+  dados (fora da amostra).}
 \end{itemize}
 
 \begin{itemize}[<+->]
 \tightlist
 \item
-  \alert<5>{O CA deve ser utilizado, portanto, apenas como um fator limitante.}
+  \alert<5>{O CA deve ser utilizado, portanto, como um fator limitante, 
+  \textbf{em conjunto com o IP!}}
 \end{itemize}
 
 \begin{itemize}[<+->]
 \tightlist
 \item
-  \alert<6>{A micronumerosidade deveria ser revista. Deixar que os dados falem.}
+  \alert<6>{A micronumerosidade deveria ser revista. Deixar que os dados falem!}
 \end{itemize}
 
 \end{frame}

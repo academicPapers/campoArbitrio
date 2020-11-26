@@ -32,6 +32,7 @@ library(truncnorm)
 library(quantreg)
 library(appraiseR)
 library(sf)
+library(latex2exp)
 ```
 
 # Regressão Linear
@@ -70,15 +71,15 @@ knitr::include_graphics("../../images/RlmM2.png")
 
 >- Sir Francis @galton [p. 62] [*apud* 
 @koenker2000, p. 350] criticou os seus colegas que:
->- \emph{limitam suas investigações a médias, e não parecem se deleitar com visões
-mais abrangentes. Suas almas parecem tão enfadonhas ao encanto da variedade 
-quanto ao de um nativo de um de nossos condados ingleses planos, cuja 
-retrospectiva da Suíça foi que, se as montanhas pudessem ser jogadas em seus 
+>   + \emph{limitam suas investigações a médias, e não parecem se deleitar com
+visões mais abrangentes. Suas almas parecem tão enfadonhas ao encanto da
+variedade quanto ao de um nativo de um de nossos condados ingleses planos, cuja
+retrospectiva da Suíça foi que, se as montanhas pudessem ser jogadas em seus
 lagos, dois incômodos seriam removidos de uma só vez.}
 >- Estimação é para parâmetros da população (média, variância, coeficientes, ...)
 >- Previsão é para novos dados da população (fora da amostra).
 
-## Estimação vs. previsão de valores
+## Estimação: outros quantis de dados
 
 ```{r qr, out.width = "50%", fig.cap="Regressão Quantílica."}
 #knitr::include_graphics("../../images/qr.png")
@@ -121,13 +122,17 @@ legend('topleft', xpd = TRUE, inset=c(1,0), bty = "n",
 
 ## Estimação vs. previsão de valores
 
->- NBR 14.653-02 [@NBR1465302] parece misturar as coisas
->   + A.10.1.2 Quando for adotado o valor arbitrado, o intervalo de valores 
+>- A NBR 14.653-02[@NBR1465302] parece ter também este entendimento:
+>   + **8.2.1.5.4** O campo de arbítrio não se confunde com o intervalo de 
+confiança de 80 % calculado para definir o grau de precisão da estimativa. 
+>- No Anexo A, no entanto, a NBR 14.653-02 [@NBR1465302] parece misturar as coisas:
+>   + **A.10.1.2** Quando for adotado o valor arbitrado, o intervalo de valores 
 admissíveis deve estar limitado simultaneamente (ver Figura A.2):  
 >   + a) ao intervalo em torno do valor arbitrado com amplitude igual à do 
 \emph{intervalo de predição \textbf{ou ao intervalo de confiança}} de 80% para a 
 estimativa de tendência central;
 >   + b) ao campo de arbítrio em torno da estimativa de tendência central. 
+
 
 # Por que arbitrar um valor diferente da média condicional?
 
@@ -148,7 +153,7 @@ menos 15 % seja suficiente para absorver as influências não consideradas e que
 os ajustes sejam justificados.  
 [@NBR1465302, 17, grifo nosso]
 
->- \emph{\textbf{Características próprias não contempladas no modelo}} vs. 
+>- \emph{\textbf{Características próprias não contempladas no modelo}} *vs.* 
 \emph{\textbf{variáveis relevantes não contempladas no modelo.}}
 
 ## Problema da omissão de variável relevante
@@ -162,54 +167,6 @@ ser incluídas no modelo final
 >   + $p < \sqrt{n}$ (John Tukey *apud* @matloff2017)
 >- Mesmos variáveis com significância estatística podem ter que ser retiradas do
 modelo
->- A NBR 14.653-2 prevê a utilização do CA
->- Entendemos que o CA pode ser um bom fator limitante
->- Mas não dá qualquer parâmetro para a previsão de valores
->   + P. Ex.: Lote em situação de esquina, sem variável situação
->    + Para isto, pode-se utilizar o CA. Mas em qual magnitude?
->    + Quanto a posição na quadra valoriza o lote em relação à situação de 
->    meio-de-quadra?
->    + Intervalos de Predição podem ser instrutivos
-
-## Seleção de Variáveis
-
-```{r}
-knitr::include_graphics("../../images/modelo.png")
-```
-
-
-## Seleção de Variáveis
-
-```{r, fig.cap="Seleção de Variáveis baseada em critérios de ajuste."}
-knitr::include_graphics("../../images/regsub2-1.png")
-```
-
-## Seleção de Variáveis
-
-```{r}
-data(centro_2015)
-dados <- st_drop_geometry(centro_2015)
-dados$padrao <- as.numeric(dados$padrao)
-fit <- lm(log(valor)~area_total + quartos + suites + garagens +
-            log(dist_b_mar) + I(1/padrao), dados, subset = -c(31, 39))
-#summary(fit)
-fit1 <- update(fit, .~.-suites)
-```
-
-```{r}
-new <- dados[52, ]
-p <- predict(fit, newdata = new, interval = "confidence", level = .80)
-p1 <- predict(fit1, newdata = new, interval = "confidence", level = .80)
-P <- predict(fit, newdata = new, interval = "prediction", level = .80)
-P1 <- predict(fit1, newdata = new, interval = "prediction", level = .80)
-# p; p1
-# P; P1
-```
-
->- Modelo com variável suítes, IC: `r brf(exp(p))`; Amplitude: `r brf(amplitude(exp(p)))`%
->- Modelo sem variável suítes, IC: `r brf(exp(p1))`; Amplitude: `r brf(amplitude(exp(p1)))`%
->- Modelo com variável suítes, IP: `r brf(exp(P))`; Amplitude: `r brf(amplitude(exp(P)))`%
->- Modelo sem variável suítes, IP: `r brf(exp(P1))`; Amplitude: `r brf(amplitude(exp(P1)))`%
 
 ## Além da omissão de variáveis relevantes
 
@@ -245,6 +202,66 @@ letter} -- Blaise Pascal *apud* @matloff2017.
 <!-- knitr::include_graphics("../../images/The-overfitting-of-model.jpg") -->
 <!-- ``` -->
 
+## Seleção de Variáveis
+
+```{r}
+knitr::include_graphics("../../images/modelo.png")
+```
+
+## Seleção de Variáveis
+
+```{r}
+data(centro_2015)
+dados <- st_drop_geometry(centro_2015)
+dados$padrao <- as.numeric(dados$padrao)
+fit <- lm(log(valor)~area_total + quartos + suites + garagens +
+            log(dist_b_mar) + I(1/padrao), dados, subset = -c(31, 39))
+library(leaps)
+b <- regsubsets(log(valor)~area_total + quartos + suites + garagens +
+            log(dist_b_mar) + I(1/padrao), dados[-c(31, 39), ])
+rs <- summary(b)
+#summary(fit)
+fit1 <- update(fit, .~.-suites)
+```
+
+```{r regsub2, fig.width = 6, fig.height = 3, fig.cap="Seleção de Variáveis baseada em critérios de qualidade.", out.width = "80%"}
+df <- data.frame(n = 1:length(rs$bic), BIC = rs$bic, R2 = rs$adjr2)
+p1 <- ggplot(df, aes(x = n, y = BIC)) + 
+  geom_point() +
+  geom_line() +
+  labs(x = "Número de Regressores", y = "Bayes IC")
+p2 <- ggplot(df, aes(x = n, y = R2)) + 
+  geom_point() +
+  geom_line() +
+  labs(x = "Número de Regressores", y = TeX("$R^2_{ajustado}$"))
+cowplot::plot_grid(p1, p2, labels = c("A", "B"))
+#knitr::include_graphics("../../images/regsub2-1.png")
+```
+
+
+## Seleção de  Variáveis
+
+```{r}
+plot(b)
+```
+
+
+## Seleção de  Variáveis
+
+```{r}
+new <- dados[52, ]
+p <- predict(fit, newdata = new, interval = "confidence", level = .80)
+p1 <- predict(fit1, newdata = new, interval = "confidence", level = .80)
+P <- predict(fit, newdata = new, interval = "prediction", level = .80)
+P1 <- predict(fit1, newdata = new, interval = "prediction", level = .80)
+# p; p1
+# P; P1
+```
+
+>- Modelo com variável suítes, IC: `r brf(exp(p))`; Amplitude: `r brf(amplitude(exp(p)))`%
+>- Modelo sem variável suítes, IC: `r brf(exp(p1))`; Amplitude: `r brf(amplitude(exp(p1)))`%
+>- Modelo com variável suítes, IP: `r brf(exp(P))`; Amplitude: `r brf(amplitude(exp(P)))`%
+>- Modelo sem variável suítes, IP: `r brf(exp(P1))`; Amplitude: `r brf(amplitude(exp(P1)))`%
 
 
 ## Exemplo
@@ -254,12 +271,13 @@ Engenharia de Avaliações identificar quando um imóvel tem valor acima ou abai
 da média do mercado
 >   + P. ex.: Existem diversos lotes com $A = 360m^2$ e $F = 12m$, porém nem todos são iguais
 >     + Um possui melhor pedologia ($Ped$)
->     + Outro possui melhor topografia ($Topo$)
+>     + Outro possui melhor Topografia ($Topo$)
 >     + Outro possui melhor Posição na Quadra ($PQ$)
->     + Outro tem melhor posição solar ($PS$)
+>     + Outro tem melhor Posição Solar ($PS$)
 >     + Devido a estas pequenas diferenças, $\varepsilon \ne 0$
->     + Porém, alguns lotes tem melhor $Ped, Topo, PQ \,\textbf{e}\, PS$.
->     + Enquanto outros tem pior  $Ped, Topo, PQ \,\textbf{e}\, PS$.
+>     + Porém, um lote em específico pode ter melhor $Ped, Topo, PQ \,\textbf{e}\, PS$.
+>     + Enquanto outro pode ter pior  $Ped, Topo, PQ \,\textbf{e}\, PS$.
+>     + O valor médio estimado pelo modelo é R\$100,00/$m^2$
 >     + É justo avaliá-los com o valor médio?
     
 # Estudos de casos
@@ -299,7 +317,18 @@ da média do mercado
 knitr::include_graphics("../../images/modelos-1.png")
 ```
 
+## Omissão de variável relevante
+
 - Qual o valor de um lote dado que $A = 480 \, e\, PQ = 1$
+
+>- A NBR 14.653-2 prevê a utilização do CA
+>- Entendemos que o CA pode ser um bom fator limitante
+>- Mas não dá qualquer parâmetro para a previsão de valores
+>   + P. Ex.: Lote em situação de esquina, sem variável situação
+>    + Pode-se utilizar o CA. Mas em qual magnitude?
+>    + Quanto a posição na quadra valoriza o lote em relação à situação de 
+>    meio-de-quadra?
+>    + Intervalos de Predição podem ser instrutivos
 
 ## Micronumerosidade
 
@@ -309,7 +338,7 @@ knitr::include_graphics("../../images/modelos-1.png")
 knitr::include_graphics("../../images/modelo-1.png")
 ```
 
->- \alert<2>{Quanto vale imóvel de alto padrão?}
+>- \alert<2>{Quanto vale imóvel de Padrão Alto? (Com código alocado seria possível \cite[A.6]{NBR1465302})}
 
 ## Micronumerosidade (2)
 
@@ -319,7 +348,7 @@ knitr::include_graphics("../../images/modelo-1.png")
 knitr::include_graphics("../../images/modelo1-1.png")
 ```
 
->- \alert<2>{$Var(VU|Padrao = alto) > Var(VU| Padrao \ne alto)$}
+>- \alert<2>{$Var(VU|Padrao = Alto) > Var(VU| Padrao \ne Alto)$. Se atende GP, por que não?}
 
 ## Avaliação Intervalar
 
@@ -362,15 +391,17 @@ ajustado com o modelo de regressão linear.}
 
 >- \alert<2>{A NBR 14653-2 \citeyear{NBR1465302} permite que o CA seja 
 utilizado apenas quando da omissão de variável relevante. Esta exigência não 
-consta na parte 1 \citeyear{NBR1465301}}
+consta na NBR 14653-1 \citeyear{NBR1465301}.}
 
 >-  \alert<3>{O cálculo do IP é um bom parâmetro para estimar o \emph{quanto} o 
 valor do bem pode/deve ser majorado ou minorado.}
 
->- \alert<4>{O IC não é um bom parâmetro para a arbitragem de valores.}
+>- \alert<4>{O IC não é um bom parâmetro para a arbitragem de valores para novos
+dados (fora da amostra).}
 
->- \alert<5>{O CA deve ser utilizado, portanto, apenas como um fator limitante.}
+>- \alert<5>{O CA deve ser utilizado, portanto, como um fator limitante, 
+\textbf{em conjunto com o IP!}}
 
->- \alert<6>{A micronumerosidade deveria ser revista. Deixar que os dados falem.}
+>- \alert<6>{A micronumerosidade deveria ser revista. Deixar que os dados falem!}
 
 # Referências {-}

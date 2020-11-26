@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.11.25)  25 NOV 2020 18:23
+This is XeTeX, Version 3.14159265-2.6-0.999992 (TeX Live 2020/W32TeX) (preloaded format=xelatex 2020.11.25)  26 NOV 2020 10:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2509,7 +2509,7 @@ File: index_files/figure-beamer/qr-1.pdf Graphic file (type pdf)
 
 ]
 LaTeX Font Info:    Font shape `TU/lmss/bx/it' in size <7> not available
-(Font)              Font shape `TU/lmss/bx/sl' tried instead on input line 297.
+(Font)              Font shape `TU/lmss/bx/sl' tried instead on input line 313.
 
 [26
 
@@ -2525,15 +2525,15 @@ LaTeX Font Info:    Font shape `TU/lmss/bx/it' in size <7> not available
 
 ] [32
 
-]
-LaTeX Font Info:    Font shape `TU/lmss/bx/it' in size <9> not available
-(Font)              Font shape `TU/lmss/bx/sl' tried instead on input line 339.
-
-[33
+] [33
 
 ] [34
 
-] [35
+]
+LaTeX Font Info:    Font shape `TU/lmss/bx/it' in size <9> not available
+(Font)              Font shape `TU/lmss/bx/sl' tried instead on input line 356.
+
+[35
 
 ] [36
 
@@ -2549,28 +2549,57 @@ LaTeX Font Info:    Font shape `TU/lmss/bx/it' in size <9> not available
 
 ] [42
 
-] [43
+]
+File: ../../images/The-dart-example.jpg Graphic file (type bmp)
+<../../images/The-dart-example.jpg>
+[43
 
-] [44
+]
+File: ../../images/An-example-for-a-underfitting-b-good-fit-and-c-overfitting-T
+he-black-circles-and_W640.jpg Graphic file (type bmp)
+<../../images/An-example-for-a-underfitting-b-good-fit-and-c-overfitting-The-bl
+ack-circles-and_W640.jpg>
 
-] [45
+Overfull \vbox (6.50822pt too high) detected at line 415
+ []
 
-] [46
+[44
 
-] [47
+]
+File: ../../images/model_complexity.png Graphic file (type bmp)
+<../../images/model_complexity.png>
+
+Overfull \vbox (9.67986pt too high) detected at line 443
+ []
+
+[45
+
+]
+File: ../../images/model_complexity.png Graphic file (type bmp)
+<../../images/model_complexity.png>
+
+Overfull \vbox (9.67986pt too high) detected at line 443
+ []
+
+[46
 
 ]
 File: ../../images/modelo.png Graphic file (type bmp)
 <../../images/modelo.png>
 
-Overfull \vbox (29.82687pt too high) detected at line 392
+Overfull \vbox (29.82687pt too high) detected at line 450
  []
 
+[47
+
+]
+File: index_files/figure-beamer/regsub2-1.pdf Graphic file (type pdf)
+<use index_files/figure-beamer/regsub2-1.pdf>
 [48
 
 ]
-File: ../../images/regsub2-1.png Graphic file (type bmp)
-<../../images/regsub2-1.png>
+File: index_files/figure-beamer/unnamed-chunk-7-1.pdf Graphic file (type pdf)
+<use index_files/figure-beamer/unnamed-chunk-7-1.pdf>
 [49
 
 ] [50
@@ -2581,39 +2610,13 @@ File: ../../images/regsub2-1.png Graphic file (type bmp)
 
 ] [53
 
-]
-File: ../../images/The-dart-example.jpg Graphic file (type bmp)
-<../../images/The-dart-example.jpg>
-[54
+] [54
 
-]
-File: ../../images/An-example-for-a-underfitting-b-good-fit-and-c-overfitting-T
-he-black-circles-and_W640.jpg Graphic file (type bmp)
-<../../images/An-example-for-a-underfitting-b-good-fit-and-c-overfitting-The-bl
-ack-circles-and_W640.jpg>
+] [55
 
-Overfull \vbox (6.50822pt too high) detected at line 459
- []
+] [56
 
-[55
-
-]
-File: ../../images/model_complexity.png Graphic file (type bmp)
-<../../images/model_complexity.png>
-
-Overfull \vbox (9.67986pt too high) detected at line 487
- []
-
-[56
-
-]
-File: ../../images/model_complexity.png Graphic file (type bmp)
-<../../images/model_complexity.png>
-
-Overfull \vbox (9.67986pt too high) detected at line 487
- []
-
-[57
+] [57
 
 ] [58
 
@@ -2631,105 +2634,105 @@ Overfull \vbox (9.67986pt too high) detected at line 487
 
 ] [65
 
-] [66
+]
+File: ../../images/modelos-1.png Graphic file (type bmp)
+<../../images/modelos-1.png>
+
+Overfull \vbox (21.81435pt too high) detected at line 552
+ []
+
+[66
 
 ] [67
 
 ] [68
 
-]
-File: ../../images/modelos-1.png Graphic file (type bmp)
-<../../images/modelos-1.png>
+] [69
 
-Overfull \vbox (42.15276pt too high) detected at line 551
- []
+] [70
 
-[69
+] [71
 
-]
-File: ../../images/modelo-1.png Graphic file (type bmp)
-<../../images/modelo-1.png>
+] [72
 
-Overfull \vbox (7.25717pt too high) detected at line 577
- []
-
-[70
+] [73
 
 ]
 File: ../../images/modelo-1.png Graphic file (type bmp)
 <../../images/modelo-1.png>
 
-Overfull \vbox (7.25717pt too high) detected at line 577
+Overfull \vbox (7.75217pt too high) detected at line 612
  []
 
-[71
-
-]
-File: ../../images/modelo1-1.png Graphic file (type bmp)
-<../../images/modelo1-1.png>
-
-Overfull \vbox (9.90318pt too high) detected at line 603
- []
-
-[72
-
-]
-File: ../../images/modelo1-1.png Graphic file (type bmp)
-<../../images/modelo1-1.png>
-
-Overfull \vbox (9.90318pt too high) detected at line 603
- []
-
-[73
-
-]
-File: index_files/figure-beamer/unnamed-chunk-12-1.pdf Graphic file (type pdf)
-<use index_files/figure-beamer/unnamed-chunk-12-1.pdf>
 [74
 
 ]
-File: ../../images/dists-1.png Graphic file (type bmp)
-<../../images/dists-1.png>
+File: ../../images/modelo-1.png Graphic file (type bmp)
+<../../images/modelo-1.png>
 
-Overfull \vbox (9.32315pt too high) detected at line 657
+Overfull \vbox (7.75217pt too high) detected at line 612
  []
 
 [75
 
 ]
-File: ../../images/dists-1.png Graphic file (type bmp)
-<../../images/dists-1.png>
+File: ../../images/modelo1-1.png Graphic file (type bmp)
+<../../images/modelo1-1.png>
 
-Overfull \vbox (9.32315pt too high) detected at line 657
+Overfull \vbox (9.90318pt too high) detected at line 638
  []
 
 [76
 
 ]
-File: ../../images/dists-1.png Graphic file (type bmp)
-<../../images/dists-1.png>
+File: ../../images/modelo1-1.png Graphic file (type bmp)
+<../../images/modelo1-1.png>
 
-Overfull \vbox (9.32315pt too high) detected at line 657
+Overfull \vbox (9.90318pt too high) detected at line 638
  []
 
 [77
 
 ]
+File: index_files/figure-beamer/unnamed-chunk-12-1.pdf Graphic file (type pdf)
+<use index_files/figure-beamer/unnamed-chunk-12-1.pdf>
+[78
+
+]
 File: ../../images/dists-1.png Graphic file (type bmp)
 <../../images/dists-1.png>
 
-Overfull \vbox (9.32315pt too high) detected at line 657
+Overfull \vbox (9.32315pt too high) detected at line 692
  []
 
-[78
+[79
 
-] [79
+]
+File: ../../images/dists-1.png Graphic file (type bmp)
+<../../images/dists-1.png>
 
-] [80
+Overfull \vbox (9.32315pt too high) detected at line 692
+ []
 
-] [81
+[80
 
-] [82
+]
+File: ../../images/dists-1.png Graphic file (type bmp)
+<../../images/dists-1.png>
+
+Overfull \vbox (9.32315pt too high) detected at line 692
+ []
+
+[81
+
+]
+File: ../../images/dists-1.png Graphic file (type bmp)
+<../../images/dists-1.png>
+
+Overfull \vbox (9.32315pt too high) detected at line 692
+ []
+
+[82
 
 ] [83
 
@@ -2737,18 +2740,26 @@ Overfull \vbox (9.32315pt too high) detected at line 657
 
 ] [85
 
+] [86
+
+] [87
+
+] [88
+
+] [89
+
 ]
 File: beamericonarticle.pdf Graphic file (type pdf)
 <use beamericonarticle.pdf>
 
 Package biblatex Warning: Month out of range
-(biblatex)                at entry 'NBR1465301' on input line 711.
+(biblatex)                at entry 'NBR1465301' on input line 748.
 
 File: beamericonarticle.pdf Graphic file (type pdf)
 <use beamericonarticle.pdf>
 
 Package biblatex Warning: Month out of range or not an integer
-(biblatex)                at entry 'NBR1465302' on input line 711.
+(biblatex)                at entry 'NBR1465302' on input line 748.
 
 File: beamericonarticle.pdf Graphic file (type pdf)
 <use beamericonarticle.pdf>
@@ -2758,7 +2769,7 @@ File: beamericonarticle.pdf Graphic file (type pdf)
 <use beamericonarticle.pdf>
 File: beamericonarticle.pdf Graphic file (type pdf)
 <use beamericonarticle.pdf>
-[86
+[90
 
 ]
 \tf@nav=\write7
@@ -2782,15 +2793,15 @@ Package logreq Info: Writing requests to 'index.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 37265 strings out of 479387
- 772406 string characters out of 5877505
- 1622441 words of memory out of 5000000
- 55883 multiletter control sequences out of 15000+600000
+ 37272 strings out of 479387
+ 772749 string characters out of 5877505
+ 1622553 words of memory out of 5000000
+ 55889 multiletter control sequences out of 15000+600000
  554832 words of font info for 80 fonts, out of 8000000 for 9000
  16 hyphenation exceptions out of 8191
  107i,13n,117p,1808b,5758s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on index.pdf (86 pages).
+Output written on index.pdf (90 pages).
 
 ! kpathsea:make_tex: Invalid filename `Fira Sans Light', contains ' '
 ! kpathsea:make_tex: Invalid filename `Fira Sans Light Italic', contains ' '
